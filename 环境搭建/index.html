@@ -117,7 +117,7 @@
 </li>
 <li>
 <p>对于VScode 需要安装下面两个插件，支持高亮和部分补全 
-<img alt="img/cmakeplugin.png" src="../img/cmakeplugin.png" /></p>
+<img alt="img/cmakeplugin.png" src="../img/vscodecmake.png" /></p>
 <blockquote>
 <p>安装CMake插件后可能没有完全展示状态条,需要在.vscode/settings.json中加上<br>
 <code>"cmake.options.&gt; statusBarVisibility": "compact"</code></p>
@@ -128,8 +128,8 @@
 <p>显示[Debug]是指构建的时候会使用Debug作为构建类型,可以选择的有Debug、Release、RelWithDebInfo 和 MinSizeRel
 构建类型会影响下面的内容(影响的命令行参数以GCC为例)：<br>
 1. 优化级别: [-O1,-O2,-O3]
-2. 是否可执行文件包含<code>调试信息</code>: [-g]
-3. 代码中assert是否存在: [-DNDEBUG]
+2. 可执行文件是否包含<code>调试信息</code>: [-g]
+3. 代码中assert是否起作用: [-DNDEBUG]
 4. 
 Debug: 带有Debug信息，支持断点。
 Release：没有Debug信息，不支持断点，启用代码优化。
