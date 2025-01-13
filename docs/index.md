@@ -1,5 +1,6 @@
 # 现代CMake教程
 C++的复杂系统构建几乎都要用到CMake,虽然国内已有不少关于CMake的教程，但是很多缺少专业性，不够严谨，所以我们需要一个现代的、准确的CMake教程。
+> 项目目前正在开发中[github仓库](https://github.com/CrossroadW/ModernCMake)
 
 ![cmake](img/cmakerate.png)
 
