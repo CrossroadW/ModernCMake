@@ -61,6 +61,18 @@ $ ./step1
 <a id="metabuildsystem"></a>
 #### 元构建系统(metabuildsystem):
 元构建系统即一个生成其他构建系统的构建系统。如:[GYP](https://gyp.gsrc.io/)(Generate Your Projects)
+
+
+#### CMake与构建系统关系
+构建系统：将开发者写的的`源代码`转换为可供机器读取的二进制文件。
+例如:构建系统可以是make和项目的Makefile(也可以是IDE的项目文件)组合成的项目文件。
+CMake通过generator这一`后端`生成适用于每个机器的构建系统。
+生成构建系统需要三个要素：
+Source Tree(源代码目录):包含源代码的项目顶级目录，从名为CMakeLists.txt文件开始。
+Build Tree(构建树目录)：存储构建系统的顶级目录，CMake会生成有CMakeCache.txt来为该目录标记并存储构建信息。(CMake支持将Build Tree置于Source Tree内(源内构建)，但不鼓励这样做)
+生成器: 进行CMake配置时使用 -G 选项来指定生成器(或者不写，保持默认)
+
+
 ## 参考文档
 <https://cliutils.gitlab.io/modern-cmake/README.html>  
 <https://cmake.org/cmake/help/v3.20/index.html>  
