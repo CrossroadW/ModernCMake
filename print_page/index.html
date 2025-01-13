@@ -60,6 +60,14 @@
 <li>
     <a href="../%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="dropdown-item">CMake C++环境搭建</a>
 </li>
+                                    
+<li>
+    <a href="../%E7%8E%B0%E4%BB%A3CMake%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/" class="dropdown-item">现代CMake的核心概念</a>
+</li>
+                                    
+<li>
+    <a href="../%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="dropdown-item">最小的CMake构建可执行程序的例子</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -101,10 +109,18 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="1"><a href="#%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5" class="nav-link">3. 现代CMake的核心概念</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="1"><a href="#%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba" class="nav-link">4. 最小的CMake构建可执行程序的例子</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
             
-            <li class="nav-item" data-bs-level="0"><a href="#about" class="nav-link">3. 关于</a>
+            <li class="nav-item" data-bs-level="0"><a href="#about" class="nav-link">5. 关于</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -126,18 +142,30 @@
                             章节列表 <a class='headerlink' href='#section-章节列表' title='Permanent link'>↵</a>
                         </h1>
                         <section class="print-page" id="index"><h1 id="index-cmake">现代CMake教程</h1>
-<p>C++的复杂系统构建几乎都要用到CMake,尽管国内先进的CMake系统教程有很多，但是很多缺少专业性，不够严谨，所以我们需要一个现代的、准确的CMake教程。</p>
+<p>C++的复杂系统构建几乎都要用到CMake,虽然国内已有不少关于CMake的教程，但是很多缺少专业性，不够严谨，所以我们需要一个现代的、准确的CMake教程。</p>
 <p><img alt="cmake" src="../img/cmakerate.png" /></p>
 <h2 id="index-cmake_1">什么是CMake？</h2>
-<p><a href="https://cmake.org/">CMake</a> 是一个跨平台的开源<a href="https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#introduction">构建系统</a>生成器(也称为<a href="https://en.wikipedia.org/wiki/List_of_build_automation_software">元构建工具</a>)，可以给其他构建工具(Visual Studio、Make、Ninja、Xcode)生成配置文件(project.sln、build.ninja、Makefile)。</p>
-<p>从根本来讲构建系统就是将源代码转换(.cpp)为二进制文件(.exe|.lib|.dll)
+<p><a href="https://cmake.org/">CMake</a> 是一个跨平台的开源<a href="#index-buildsystem">构建系统</a>生成器(也称为<a href="https://en.wikipedia.org/wiki/List_of_build_automation_software">元构建工具</a>)，它能够为其他构建工具（如 Visual Studio、Make、Ninja、Xcode）生成配置文件（例如 project.sln、build.ninja、Makefile）<br />
+CMake 的特色功能包括：</p>
+<blockquote>
+<ul>
+<li>跨平台支持：可以在不同的操作系统和编译器之间无缝切换。</li>
+<li>Target-centric approach(以<a href="#现代cmake的核心概念-coreconcept">目标</a>为中心)：能够自动检测文件间的依赖关系，减少手动操作。</li>
+<li>多种构建系统支持：支持生成 Visual Studio、Make、Ninja 等多种构建工具的配置文件。</li>
+<li>跨平台安装：使用相同的命令集，可以在 Linux、Windows 和 Mac 上安装软件包。</li>
+<li>支持调试CMake代码(Visual Studio、VScode):<a href="https://microsoft.github.io/debug-adapter-protocol/implementors/tools/">第三方工具</a></li>
+</ul>
+</blockquote>
+<p>本质上，构建系统的任务是将源代码文件（如 .cpp）转换为可执行的二进制文件（如 .exe、.lib、.dll）。
 <img alt="public/Single_Source_Build.png" src="../img/Single_Source_Build.png" /></p>
 <h2 id="index-_1">为什么不直接使用编译器？</h2>
-<p>最简单的的当然是直接使用命令行调用gcc、cl.exe、clang++等工具，但是一旦代码库复杂起来，就不可能只靠命令行。</p>
-<p>单文件的情况下编译只需要一行</p>
+<p>最简单的方法是直接通过命令行调用编译器，如 gcc、cl.exe、clang++ 等工具。但是，当代码库变得复杂时，仅靠命令行不够用了。</p>
+<h4 id="index-_2">单文件编译</h4>
+<p>对于单个文件的编译，只需一条命令：</p>
 <pre><code class="language-bash">g++ -o main.exe main.cpp
 </code></pre>
-<p>多个文件的话就会复杂一点:</p>
+<h4 id="index-_3">多文件编译</h4>
+<p>当涉及多个源文件时，命令行更复杂：:</p>
 <pre><code class="language-bash"># examples/step1
 $ tree
 ├── foo.cpp
@@ -149,45 +177,215 @@ $ g++ -o step1 main.o foo.o
 $ ./step1 
 43
 </code></pre>
-<p>而且当我们需要构建debug、release版本并且需要手动链接库的时候，命令行就不能满足我们的需求了。</p>
-<p>下一章<a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba">环境搭建</a></p>
-<h2 id="index-_2">参考文档</h2>
-<p>https://cliutils.gitlab.io/modern-cmake/README.html<br />
-https://cmake.org/cmake/help/v3.20/index.html    <br />
-https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/
-https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction
-https://ukabuer.me/blog/more-modern-cmake/
-https://www.bilibili.com/video/BV1Mw411M761/
-https://www.bilibili.com/video/BV16P4y1g7MH
-https://crascit.com/professional-cmake/
-https://zh.wikipedia.org/wiki/CMake
-https://github.com/Mq-b/CXX_LIB</p></section><section class="print-page" id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba"><h1 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake-c">CMake C++环境搭建</h1>
+<p>此外，如果需要同时构建 Debug 和 Release 版本，或者链接外部库，命令行的复杂度将迅速提升，效率也会大大降低。</p>
+<h2 id="index-_4">下一章<a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba">环境搭建</a></h2>
+<p><br></p>
+<p><br></p>
+<h2 id="index-_5">概念解释</h2>
+<p><a id="buildsystem"></a></p>
+<h4 id="index-buildsystem"><a href="https://en.wikipedia.org/wiki/Software_build">构建</a>与构建系统(buildsystem):</h4>
+<blockquote>
+<p>简单来说，软件开发中的构建是将源代码文件“翻译”为可执行二进制代码文件的过程；而构建系统是一组用于辅助和自动化构建过程的软件工具集合。<br />
+以下是常见的构建系统:  </p>
+<blockquote>
+<p><a href="https://ninja-build.org/manual.html">Ninja build system</a><br />
+<a href="https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#introduction">cmake-buildsystem</a><br />
+<a href="https://bazel.build/about/intro?hl=zh-cn">bazel.build</a><br />
+<a href="https://www.gnu.org/software/make/">Make</a>、<a href="https://maven.apache.org/what-is-maven.html">Maven</a> 和 <a href="https://gradle.org/">Gradle</a>  </p>
+</blockquote>
+</blockquote>
+<p><a id="metabuildsystem"></a></p>
+<h4 id="index-metabuildsystem">元构建系统(metabuildsystem):</h4>
+<p>元构建系统即一个生成其他构建系统的构建系统。如:<a href="https://gyp.gsrc.io/">GYP</a>(Generate Your Projects)</p>
+<h2 id="index-_6">参考文档</h2>
+<p><a href="https://cliutils.gitlab.io/modern-cmake/README.html">https://cliutils.gitlab.io/modern-cmake/README.html</a><br />
+<a href="https://cmake.org/cmake/help/v3.20/index.html">https://cmake.org/cmake/help/v3.20/index.html</a><br />
+<a href="https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/">https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/</a><br />
+<a href="https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction">https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction</a><br />
+<a href="https://ukabuer.me/blog/more-modern-cmake/">https://ukabuer.me/blog/more-modern-cmake/</a><br />
+<a href="https://www.bilibili.com/video/BV1Mw411M761/">https://www.bilibili.com/video/BV1Mw411M761/</a><br />
+<a href="https://www.bilibili.com/video/BV16P4y1g7MH">https://www.bilibili.com/video/BV16P4y1g7MH</a><br />
+<a href="https://crascit.com/professional-cmake/">https://crascit.com/professional-cmake/</a><br />
+<a href="https://zh.wikipedia.org/wiki/CMake">https://zh.wikipedia.org/wiki/CMake</a><br />
+<a href="https://github.com/Mq-b/CXX_LIB">https://github.com/Mq-b/CXX_LIB</a><br />
+<a href="https://bazel.build/basics?hl=zh-cn">https://bazel.build/basics?hl=zh-cn</a>  </p></section><section class="print-page" id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba"><h1 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake-c">CMake C++环境搭建</h1>
+<h2 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-c">C++编译器安装</h2>
+<p>本教程主要讲解Windows上编译器的安装，仅介绍下面三种安装方式：</p>
+<h3 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-1-visual-studio">1. Visual Studio[推荐]：</h3>
+<p>安装Visual Studio并勾选Desktop development with C++<a href="https://learn.microsoft.com/zh-cn/cpp/build/vscpp-step-0-installation?view=msvc-170">VS install</a></p>
+<h3 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-2-scoop">2. Scoop(命令行安装工具):</h3>
+<p>首先在PowerShell执行<a href="https://scoop.sh/">scoop官网</a>的脚本，
+进入<a href="https://scoop.sh/#/apps?q=winlibs">winlibs</a>的搜索结果页面
+随意选择一个包，并在PowerShell中执行对应的安装命令，例如下面的命令：
+<img alt="winlibs" src="../img/scoopinstallwlibs.png" /></p>
+<blockquote>
+<p>执行这里的命令(scoop install main/mingw-winlibs)会自动将编译器的可执行文件所在目录添加进环境变量，使得PowerShell中能够直接使用g++、gcc了，以及VScode的插件和CMake能够找到对应路径下的编译器。</p>
+</blockquote>
+<h3 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-3-winlibs">3. 手动安装<a href="https://winlibs.com/">winlibs</a>：</h3>
+<p>推荐下载图中的压缩包(也可以下载右边的不带LLVM的版本，体积更小)，解压后把g++.exe所在目录加入环境变量既可
+<img alt="winlibsdownload" src="../img/winlibsdownload.png" /></p>
+<h2 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake">CMake环境准备和插件配置</h2>
 <p>实际上很多IDE上都CMake有支持，常见的如：VScode、Visual Studio、Clion，
 当然命令行是最通用的方法，这些都不是必要的，只是有高亮和补全会更友好。</p>
 <ul>
-<li>
-<p>首先需要安装CMake</p>
-</li>
-<li>
-<p>对于VScode 需要安装下面两个插件，支持高亮和部分补全 
-<img alt="img/cmakeplugin.png" src="../img/vscodecmake.png" /></p>
-<blockquote>
+<li>首先需要安装CMake</li>
+<li>对于VScode 需要安装下面两个插件，支持高亮和部分补全 
+<img alt="img/cmakeplugin.png" src="../img/vscodecmake.png" /><blockquote>
 <p>安装CMake插件后可能没有完全展示状态条,需要在.vscode/settings.json中加上<br>
 <code>"cmake.options.&gt; statusBarVisibility": "compact"</code></p>
 </blockquote>
 </li>
 </ul>
-<h2 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake">CMake插件的状态栏功能介绍</h2>
-<p>显示[Debug]是指构建的时候会使用Debug作为构建类型,可以选择的有Debug、Release、RelWithDebInfo 和 MinSizeRel
-构建类型会影响下面的内容(影响的命令行参数以GCC为例)：<br>
-1. 优化级别: [-O1,-O2,-O3]
-2. 可执行文件是否包含<code>调试信息</code>: [-g]
-3. 代码中assert是否起作用: [-DNDEBUG]
-4. 
-Debug: 带有Debug信息，支持断点。
-Release：没有Debug信息，不支持断点，启用代码优化。
-RelWithDebInfo：
-<img alt="buildtype" src="../img/buildtype.png" /></p></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1><section class="print-page" id="about"><h1 id="about-hello-about">hello about</h1></section></div></div>
+<h2 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake-tools">CMake Tools插件的具体功能</h2>
+<p>安装CMake Tools后状态栏会有我们常用的几个功能，下面介绍一下这些功能具体作用。</p>
+<h3 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-_1">构建类型</h3>
+<p><img alt="buildtype" src="../img/buildtype.png" /><br />
+图中[Debug]是指构建的时候会使用Debug作为构建类型,可以选择的有Debug、Release、RelWithDebInfo 和 MinSizeRel
+构建类型会影响下面的内容(影响的命令行参数以GCC为例)：</p>
+<ol>
+<li>优化级别: [-O1,-O2,-O3]</li>
+<li>可执行文件是否包含<code>调试信息</code>: [-g]</li>
+<li>代码中assert是否起作用: [-DNDEBUG]  <blockquote>
+<p>Debug: 带有Debug信息，支持断点<br />
+Release：没有Debug信息，不支持断点，启用代码优化(性能)。<br />
+RelWithDebInfo：启用代码优化，带有Debug信息，断点可能不准<br />
+MinSizeRel：启用代码体积优化  </p>
+</blockquote>
+</li>
+</ol>
+<h3 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-_2">编译器工具链</h3>
+<p><img alt="工具链" src="../img/vscodetoolkit.png" /><br />
+图中 <code>[GCC 14.2.1 x86_64]</code> 指 CMake 构建使用的编译器工具链，可能的选择包括：    </p>
+<blockquote>
+<p><strong>MSVC (Microsoft Visual C++)</strong>: Windows 平台下的主流编译器，通常通过 Visual Studio 或 MSBuild 安装。<br />
+<strong>MinGW/MinGW-w64</strong>: 提供 GCC 工具链的 Windows 版本，可以通过安装 MinGW-w64（例如 <code>winlibs</code>）。<br />
+<strong>Clang</strong>: 一个跨平台的现代编译器。</p>
+</blockquote>
+<p><code>工具链</code>不仅仅是指编译器，还包括构建和链接过程所需的其他工具和配置。</p>
+<details>
+<summary>工具链</summary>
+
+编译器（Compiler）: 例如 g++、cl.exe 或 clang++，用于将 C++ 源代码编译为目标文件。<br>
+链接器（Linker）: 例如 ld 或 MSVC 自带的链接工具，用于将目标文件链接成可执行文件或库。<br> 
+归档工具（Archiver）: 例如 ar，用于生成和管理静态库。  <br>
+调试器（Debugger）: 例如 gdb 或 Visual Studio 调试工具，用于调试程序运行。 <br> 
+构建工具（Build Tools）: 例如 make 或 ninja，用于执行构建规则。  <br>
+
+</details>
+
+<h3 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-_3">选择构建目标、调试、运行</h3>
+<p><img alt="debugrun" src="../img/debugrun.png" /></p>
+<ul>
+<li>最左的是选择构建目标，也就是选择生成的可执行文件(.exe)，或者构建的其他类型的目标  </li>
+<li>中间的是debug模式运行，当使用Debug|RelWithDebInfo模式或者构建了带有debug信息的程序有效  </li>
+<li>最右是运行，直接运行  </li>
+</ul>
+<p>下一章<a href="#%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5">现代CMake的核心概念</a></p></section><section class="print-page" id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5"><h1 id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5-cmake">现代CMake的核心概念</h1>
+<p><a id="coreconcept"></a></p>
+<h2 id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5-_1">目标:</h2>
+<p>目标（Target）是现代CMake最核心的概念。目标代表了由CMake构建的可执行文件、库和自定义命令。每个add_library、add_executable和add_custom_target命令都会创建一个目标。<br />
+<strong>特点</strong><br />
+- 全局作用域：可在项目中任何地方使用。
+- 自动扩展名：CMake根据平台自动决定扩展名（如Windows下可执行文件为.exe）。
+- 动态查询修改：可用set_target_properties和get_target_property动态更新目标属性。</p>
+<p>可执行文件（Executable）：通过add_executable命令创建。例如，add_executable(my_app main.cpp)会创建一个名为my_app的可执行文件，其源文件为main.cpp。</p>
+<p>库（Library）：通过add_library命令创建。例如，add_library(foo STATIC foo1.c foo2.c)会创建一个名为foo的静态库，其源文件为foo1.c和foo2.c。</p>
+<p>自定义目标（Custom Target）：通过add_custom_target命令创建，用于执行自定义的构建任务。</p>
+<h2 id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5-todo">TODO</h2>
+<p>下一章<a href="#%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba">最小构建.md</a></p></section><section class="print-page" id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba"><h1 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmake">最小的CMake构建可执行程序的例子</h1>
+<p>在本节中，我们将从零开始创建一个简单的 C++ 项目，展示如何使用 CMake 构建一个可执行文件。</p>
+<h3 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-_1"><strong>准备源代码与配置文件</strong></h3>
+<p>创建 main.cpp 文件，内容如下：</p>
+<pre><code class="language-cpp">// main.cpp
+#include &lt;iostream&gt;
+int main(){
+    puts(&quot;hello cmake&quot;);
+}
+</code></pre>
+<p>接下来，在项目目录下创建 CMakeLists.txt 文件，内容如下：</p>
+<pre><code class="language-cmake">
+# 设置 CMake 的最低版本
+cmake_minimum_required(VERSION 3.20)
+
+# 设置项目名称
+project(MinimalCMakeProject)
+
+# 定义一个可执行文件
+# 第一个参数是目标名称，第二个参数是源文件路径
+add_executable(hello_cmake main.cpp)
+</code></pre>
+<h3 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-_2">构建和运行项目</h3>
+<p>在项目根目录下，创建一个独立的构建目录(也称为原外构建)。</p>
+<blockquote>
+<p>为什么使用独立构建目录？
+这样可以将生成的构建文件与源代码分离，保持项目目录整洁，便于管理。</p>
+</blockquote>
+<pre><code class="language-bash">mkdir build
+cd build
+cmake ..
+</code></pre>
+<p><code>..</code> 表示让 CMake 查找上级目录中的 CMakeLists.txt 文件。
+执行后，CMake 会生成平台相关的构建文件，比如：
+在 Linux 上，会生成 Makefile。
+在 Windows 上，会生成 Visual Studio 工程文件。
+成功后，终端将输出类似以下内容：</p>
+<pre><code class="language-bash">awe@build$ cmake ..
+-- The C compiler identification is GNU 14.2.1
+-- The CXX compiler identification is GNU 14.2.1
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (0.5s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/awe/Desktop/code/node/Modern-CMake/examples/step1/build
+</code></pre>
+<ol>
+<li>编译项目
+在 build 目录中运行以下命令：</li>
+</ol>
+<pre><code class="language-bash">cmake --build .
+</code></pre>
+<p>成功后，你将看到类似如下输出：</p>
+<pre><code class="language-bash">awe@build$ cmake --build .
+[ 50%] Building CXX object CMakeFiles/hello_cmake.dir/main.cpp.o
+[100%] Linking CXX executable hello_cmake
+[100%] Built target hello_cmake
+</code></pre>
+<p>编译完成后，可执行文件会出现在 build 目录下，运行它：</p>
+<pre><code class="language-bash">./hello_cmake
+</code></pre>
+<p>最终可执行目录结构:</p>
+<pre><code class="language-bash">awe@step1$ tree -L 2
+.
+├── build
+│   ├── CMakeCache.txt
+│   ├── CMakeFiles
+│   ├── cmake_install.cmake
+│   ├── hello_cmake
+│   └── Makefile
+├── CMakeLists.txt
+└── main.cpp
+</code></pre>
+<h3 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmake_1">为什么CMake构建过程分为两步？</h3>
+<p><strong>配置阶段</strong> (Configuration)：配置阶段只解析项目结构和生成规则，不执行实际的编译工作。</p>
+<blockquote>
+<p>配置阶段,CMake会解析 CMakeLists.txt 文件，生成适合当前平台的构建文件（如 Makefile 或 Visual Studio 工程文件.sln等）。</p>
+</blockquote>
+<p><strong>构建阶段</strong>(Build)：</p>
+<pre><code>CMake使用第一步生成的构建文件，通过构建文件调用对应的构建工具(msbuild、make、ninja)完成构建，构建工具来调用具体的编译器（如 g++、clang++ 或 cl.exe）进行编译，生成目标文件（如可执行文件.exe或库）。
+</code></pre>
+<h2 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmake_2">CMake配置文件写什么？</h2>
+<p>CMake无非是根据输入源代码文件(.cpp)和库文件(.lib .a .so)等加工成可执行文件，至少要告诉CMake输入的源文件是什么。
+ 现代CMake构建围绕Target展开，Target可以是可执行文件(.exe),也可是库文件(.lib .a .so)，
+ 甚至是命令(自定义Target)。
+ 对于Windows而言动态库是dll后缀文件，但是windows上无法直接链接.dll，一般是链接生成的.dll的对应的.lib文件，这一步仅仅是能够编译，给编译器提供对应的库信息，在运行时需要动态库在系统的搜索路径下(windows是环境变量PATH中罗列的目录，也可以直接将dll置于exe所在目录，linux一般定义环境变量LD_LIBRARY_PATH所在目录)</p></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1><section class="print-page" id="about"><h1 id="about-hello-about">hello about</h1></section></div></div>
             </div>
         </div>
 

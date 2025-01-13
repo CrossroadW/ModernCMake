@@ -54,6 +54,14 @@
 <li>
     <a href="./" class="dropdown-item active" aria-current="page">CMake C++环境搭建</a>
 </li>
+                                    
+<li>
+    <a href="../%E7%8E%B0%E4%BB%A3CMake%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/" class="dropdown-item">现代CMake的核心概念</a>
+</li>
+                                    
+<li>
+    <a href="../%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="dropdown-item">最小的CMake构建可执行程序的例子</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -73,7 +81,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../about/" class="nav-link">
+                                <a rel="next" href="../%E7%8E%B0%E4%BB%A3CMake%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -97,7 +105,15 @@
             
             <li class="nav-item" data-bs-level="1"><a href="#cmake-c" class="nav-link">CMake C++环境搭建</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#cmake" class="nav-link">CMake插件的状态栏功能介绍</a>
+            <li class="nav-item" data-bs-level="2"><a href="#c" class="nav-link">C++编译器安装</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cmake" class="nav-link">CMake环境准备和插件配置</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cmake-tools" class="nav-link">CMake Tools插件的具体功能</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -109,32 +125,78 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="cmake-c">CMake C++环境搭建</h1>
+<h2 id="c">C++编译器安装</h2>
+<p>本教程主要讲解Windows上编译器的安装，仅介绍下面三种安装方式：</p>
+<h3 id="1-visual-studio">1. Visual Studio[推荐]：</h3>
+<p>安装Visual Studio并勾选Desktop development with C++<a href="https://learn.microsoft.com/zh-cn/cpp/build/vscpp-step-0-installation?view=msvc-170">VS install</a></p>
+<h3 id="2-scoop">2. Scoop(命令行安装工具):</h3>
+<p>首先在PowerShell执行<a href="https://scoop.sh/">scoop官网</a>的脚本，
+进入<a href="https://scoop.sh/#/apps?q=winlibs">winlibs</a>的搜索结果页面
+随意选择一个包，并在PowerShell中执行对应的安装命令，例如下面的命令：
+<img alt="winlibs" src="../img/scoopinstallwlibs.png" /></p>
+<blockquote>
+<p>执行这里的命令(scoop install main/mingw-winlibs)会自动将编译器的可执行文件所在目录添加进环境变量，使得PowerShell中能够直接使用g++、gcc了，以及VScode的插件和CMake能够找到对应路径下的编译器。</p>
+</blockquote>
+<h3 id="3-winlibs">3. 手动安装<a href="https://winlibs.com/">winlibs</a>：</h3>
+<p>推荐下载图中的压缩包(也可以下载右边的不带LLVM的版本，体积更小)，解压后把g++.exe所在目录加入环境变量既可
+<img alt="winlibsdownload" src="../img/winlibsdownload.png" /></p>
+<h2 id="cmake">CMake环境准备和插件配置</h2>
 <p>实际上很多IDE上都CMake有支持，常见的如：VScode、Visual Studio、Clion，
 当然命令行是最通用的方法，这些都不是必要的，只是有高亮和补全会更友好。</p>
 <ul>
-<li>
-<p>首先需要安装CMake</p>
-</li>
-<li>
-<p>对于VScode 需要安装下面两个插件，支持高亮和部分补全 
-<img alt="img/cmakeplugin.png" src="../img/vscodecmake.png" /></p>
-<blockquote>
+<li>首先需要安装CMake</li>
+<li>对于VScode 需要安装下面两个插件，支持高亮和部分补全 
+<img alt="img/cmakeplugin.png" src="../img/vscodecmake.png" /><blockquote>
 <p>安装CMake插件后可能没有完全展示状态条,需要在.vscode/settings.json中加上<br>
 <code>"cmake.options.&gt; statusBarVisibility": "compact"</code></p>
 </blockquote>
 </li>
 </ul>
-<h2 id="cmake">CMake插件的状态栏功能介绍</h2>
-<p>显示[Debug]是指构建的时候会使用Debug作为构建类型,可以选择的有Debug、Release、RelWithDebInfo 和 MinSizeRel
-构建类型会影响下面的内容(影响的命令行参数以GCC为例)：<br>
-1. 优化级别: [-O1,-O2,-O3]
-2. 可执行文件是否包含<code>调试信息</code>: [-g]
-3. 代码中assert是否起作用: [-DNDEBUG]
-4. 
-Debug: 带有Debug信息，支持断点。
-Release：没有Debug信息，不支持断点，启用代码优化。
-RelWithDebInfo：
-<img alt="buildtype" src="../img/buildtype.png" /></p></div>
+<h2 id="cmake-tools">CMake Tools插件的具体功能</h2>
+<p>安装CMake Tools后状态栏会有我们常用的几个功能，下面介绍一下这些功能具体作用。</p>
+<h3 id="_1">构建类型</h3>
+<p><img alt="buildtype" src="../img/buildtype.png" /><br />
+图中[Debug]是指构建的时候会使用Debug作为构建类型,可以选择的有Debug、Release、RelWithDebInfo 和 MinSizeRel
+构建类型会影响下面的内容(影响的命令行参数以GCC为例)：</p>
+<ol>
+<li>优化级别: [-O1,-O2,-O3]</li>
+<li>可执行文件是否包含<code>调试信息</code>: [-g]</li>
+<li>代码中assert是否起作用: [-DNDEBUG]  <blockquote>
+<p>Debug: 带有Debug信息，支持断点<br />
+Release：没有Debug信息，不支持断点，启用代码优化(性能)。<br />
+RelWithDebInfo：启用代码优化，带有Debug信息，断点可能不准<br />
+MinSizeRel：启用代码体积优化  </p>
+</blockquote>
+</li>
+</ol>
+<h3 id="_2">编译器工具链</h3>
+<p><img alt="工具链" src="../img/vscodetoolkit.png" /><br />
+图中 <code>[GCC 14.2.1 x86_64]</code> 指 CMake 构建使用的编译器工具链，可能的选择包括：    </p>
+<blockquote>
+<p><strong>MSVC (Microsoft Visual C++)</strong>: Windows 平台下的主流编译器，通常通过 Visual Studio 或 MSBuild 安装。<br />
+<strong>MinGW/MinGW-w64</strong>: 提供 GCC 工具链的 Windows 版本，可以通过安装 MinGW-w64（例如 <code>winlibs</code>）。<br />
+<strong>Clang</strong>: 一个跨平台的现代编译器。</p>
+</blockquote>
+<p><code>工具链</code>不仅仅是指编译器，还包括构建和链接过程所需的其他工具和配置。</p>
+<details>
+<summary>工具链</summary>
+
+编译器（Compiler）: 例如 g++、cl.exe 或 clang++，用于将 C++ 源代码编译为目标文件。<br>
+链接器（Linker）: 例如 ld 或 MSVC 自带的链接工具，用于将目标文件链接成可执行文件或库。<br> 
+归档工具（Archiver）: 例如 ar，用于生成和管理静态库。  <br>
+调试器（Debugger）: 例如 gdb 或 Visual Studio 调试工具，用于调试程序运行。 <br> 
+构建工具（Build Tools）: 例如 make 或 ninja，用于执行构建规则。  <br>
+
+</details>
+
+<h3 id="_3">选择构建目标、调试、运行</h3>
+<p><img alt="debugrun" src="../img/debugrun.png" /></p>
+<ul>
+<li>最左的是选择构建目标，也就是选择生成的可执行文件(.exe)，或者构建的其他类型的目标  </li>
+<li>中间的是debug模式运行，当使用Debug|RelWithDebInfo模式或者构建了带有debug信息的程序有效  </li>
+<li>最右是运行，直接运行  </li>
+</ul>
+<p>下一章<a href="../%E7%8E%B0%E4%BB%A3CMake%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/">现代CMake的核心概念</a></p></div>
             </div>
         </div>
 

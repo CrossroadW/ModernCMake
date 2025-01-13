@@ -54,6 +54,14 @@
 <li>
     <a href="%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="dropdown-item">CMake C++环境搭建</a>
 </li>
+                                    
+<li>
+    <a href="%E7%8E%B0%E4%BB%A3CMake%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/" class="dropdown-item">现代CMake的核心概念</a>
+</li>
+                                    
+<li>
+    <a href="%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="dropdown-item">最小的CMake构建可执行程序的例子</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -105,7 +113,15 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">参考文档</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_4" class="nav-link">下一章环境搭建</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_5" class="nav-link">概念解释</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_6" class="nav-link">参考文档</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -117,18 +133,30 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="cmake">现代CMake教程</h1>
-<p>C++的复杂系统构建几乎都要用到CMake,尽管国内先进的CMake系统教程有很多，但是很多缺少专业性，不够严谨，所以我们需要一个现代的、准确的CMake教程。</p>
+<p>C++的复杂系统构建几乎都要用到CMake,虽然国内已有不少关于CMake的教程，但是很多缺少专业性，不够严谨，所以我们需要一个现代的、准确的CMake教程。</p>
 <p><img alt="cmake" src="img/cmakerate.png" /></p>
 <h2 id="cmake_1">什么是CMake？</h2>
-<p><a href="https://cmake.org/">CMake</a> 是一个跨平台的开源<a href="https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#introduction">构建系统</a>生成器(也称为<a href="https://en.wikipedia.org/wiki/List_of_build_automation_software">元构建工具</a>)，可以给其他构建工具(Visual Studio、Make、Ninja、Xcode)生成配置文件(project.sln、build.ninja、Makefile)。</p>
-<p>从根本来讲构建系统就是将源代码转换(.cpp)为二进制文件(.exe|.lib|.dll)
+<p><a href="https://cmake.org/">CMake</a> 是一个跨平台的开源<a href="#buildsystem">构建系统</a>生成器(也称为<a href="https://en.wikipedia.org/wiki/List_of_build_automation_software">元构建工具</a>)，它能够为其他构建工具（如 Visual Studio、Make、Ninja、Xcode）生成配置文件（例如 project.sln、build.ninja、Makefile）<br />
+CMake 的特色功能包括：</p>
+<blockquote>
+<ul>
+<li>跨平台支持：可以在不同的操作系统和编译器之间无缝切换。</li>
+<li>Target-centric approach(以<a href="现代CMake的核心概念/#coreconcept">目标</a>为中心)：能够自动检测文件间的依赖关系，减少手动操作。</li>
+<li>多种构建系统支持：支持生成 Visual Studio、Make、Ninja 等多种构建工具的配置文件。</li>
+<li>跨平台安装：使用相同的命令集，可以在 Linux、Windows 和 Mac 上安装软件包。</li>
+<li>支持调试CMake代码(Visual Studio、VScode):<a href="https://microsoft.github.io/debug-adapter-protocol/implementors/tools/">第三方工具</a></li>
+</ul>
+</blockquote>
+<p>本质上，构建系统的任务是将源代码文件（如 .cpp）转换为可执行的二进制文件（如 .exe、.lib、.dll）。
 <img alt="public/Single_Source_Build.png" src="img/Single_Source_Build.png" /></p>
 <h2 id="_1">为什么不直接使用编译器？</h2>
-<p>最简单的的当然是直接使用命令行调用gcc、cl.exe、clang++等工具，但是一旦代码库复杂起来，就不可能只靠命令行。</p>
-<p>单文件的情况下编译只需要一行</p>
+<p>最简单的方法是直接通过命令行调用编译器，如 gcc、cl.exe、clang++ 等工具。但是，当代码库变得复杂时，仅靠命令行不够用了。</p>
+<h4 id="_2">单文件编译</h4>
+<p>对于单个文件的编译，只需一条命令：</p>
 <pre><code class="language-bash">g++ -o main.exe main.cpp
 </code></pre>
-<p>多个文件的话就会复杂一点:</p>
+<h4 id="_3">多文件编译</h4>
+<p>当涉及多个源文件时，命令行更复杂：:</p>
 <pre><code class="language-bash"># examples/step1
 $ tree
 ├── foo.cpp
@@ -140,19 +168,38 @@ $ g++ -o step1 main.o foo.o
 $ ./step1 
 43
 </code></pre>
-<p>而且当我们需要构建debug、release版本并且需要手动链接库的时候，命令行就不能满足我们的需求了。</p>
-<p>下一章<a href="%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a></p>
-<h2 id="_2">参考文档</h2>
-<p>https://cliutils.gitlab.io/modern-cmake/README.html<br />
-https://cmake.org/cmake/help/v3.20/index.html    <br />
-https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/
-https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction
-https://ukabuer.me/blog/more-modern-cmake/
-https://www.bilibili.com/video/BV1Mw411M761/
-https://www.bilibili.com/video/BV16P4y1g7MH
-https://crascit.com/professional-cmake/
-https://zh.wikipedia.org/wiki/CMake
-https://github.com/Mq-b/CXX_LIB</p></div>
+<p>此外，如果需要同时构建 Debug 和 Release 版本，或者链接外部库，命令行的复杂度将迅速提升，效率也会大大降低。</p>
+<h2 id="_4">下一章<a href="%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a></h2>
+<p><br></p>
+<p><br></p>
+<h2 id="_5">概念解释</h2>
+<p><a id="buildsystem"></a></p>
+<h4 id="buildsystem"><a href="https://en.wikipedia.org/wiki/Software_build">构建</a>与构建系统(buildsystem):</h4>
+<blockquote>
+<p>简单来说，软件开发中的构建是将源代码文件“翻译”为可执行二进制代码文件的过程；而构建系统是一组用于辅助和自动化构建过程的软件工具集合。<br />
+以下是常见的构建系统:  </p>
+<blockquote>
+<p><a href="https://ninja-build.org/manual.html">Ninja build system</a><br />
+<a href="https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#introduction">cmake-buildsystem</a><br />
+<a href="https://bazel.build/about/intro?hl=zh-cn">bazel.build</a><br />
+<a href="https://www.gnu.org/software/make/">Make</a>、<a href="https://maven.apache.org/what-is-maven.html">Maven</a> 和 <a href="https://gradle.org/">Gradle</a>  </p>
+</blockquote>
+</blockquote>
+<p><a id="metabuildsystem"></a></p>
+<h4 id="metabuildsystem">元构建系统(metabuildsystem):</h4>
+<p>元构建系统即一个生成其他构建系统的构建系统。如:<a href="https://gyp.gsrc.io/">GYP</a>(Generate Your Projects)</p>
+<h2 id="_6">参考文档</h2>
+<p><a href="https://cliutils.gitlab.io/modern-cmake/README.html">https://cliutils.gitlab.io/modern-cmake/README.html</a><br />
+<a href="https://cmake.org/cmake/help/v3.20/index.html">https://cmake.org/cmake/help/v3.20/index.html</a><br />
+<a href="https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/">https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/</a><br />
+<a href="https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction">https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction</a><br />
+<a href="https://ukabuer.me/blog/more-modern-cmake/">https://ukabuer.me/blog/more-modern-cmake/</a><br />
+<a href="https://www.bilibili.com/video/BV1Mw411M761/">https://www.bilibili.com/video/BV1Mw411M761/</a><br />
+<a href="https://www.bilibili.com/video/BV16P4y1g7MH">https://www.bilibili.com/video/BV16P4y1g7MH</a><br />
+<a href="https://crascit.com/professional-cmake/">https://crascit.com/professional-cmake/</a><br />
+<a href="https://zh.wikipedia.org/wiki/CMake">https://zh.wikipedia.org/wiki/CMake</a><br />
+<a href="https://github.com/Mq-b/CXX_LIB">https://github.com/Mq-b/CXX_LIB</a><br />
+<a href="https://bazel.build/basics?hl=zh-cn">https://bazel.build/basics?hl=zh-cn</a>  </p></div>
             </div>
         </div>
 
