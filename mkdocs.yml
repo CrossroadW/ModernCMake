@@ -1,4 +1,5 @@
 site_name: 现代CMake教程
+site_dir: site
 plugins:
   - snippet
   - search
