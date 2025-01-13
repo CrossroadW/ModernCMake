@@ -4,7 +4,6 @@ plugins:
   - search
   - macros
   - print-site
-
 extra_javascript:
   - extra.js
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
@@ -14,4 +13,6 @@ nav:
   - 章节列表: 
     - index.md
     - 环境搭建.md
+    - 现代CMake的核心概念.md
+    - 最小构建.md
   - 关于: about.md
