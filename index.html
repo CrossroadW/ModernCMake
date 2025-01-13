@@ -62,6 +62,14 @@
 <li>
     <a href="%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="dropdown-item">最小的CMake构建可执行程序的例子</a>
 </li>
+                                    
+<li>
+    <a href="todo.md" class="dropdown-item">todo...</a>
+</li>
+                                    
+<li>
+    <a href="%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="dropdown-item">基本常识</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -191,6 +199,14 @@ $ ./step1
 <p><a id="metabuildsystem"></a></p>
 <h4 id="metabuildsystem">元构建系统(metabuildsystem):</h4>
 <p>元构建系统即一个生成其他构建系统的构建系统。如:<a href="https://gyp.gsrc.io/">GYP</a>(Generate Your Projects)</p>
+<h4 id="cmake_2">CMake与构建系统关系</h4>
+<p>构建系统：将开发者写的的<code>源代码</code>转换为可供机器读取的二进制文件。
+例如:构建系统可以是make和项目的Makefile(也可以是IDE的项目文件)组合成的项目文件。
+CMake通过generator这一<code>后端</code>生成适用于每个机器的构建系统。
+生成构建系统需要三个要素：
+Source Tree(源代码目录):包含源代码的项目顶级目录，从名为CMakeLists.txt文件开始。
+Build Tree(构建树目录)：存储构建系统的顶级目录，CMake会生成有CMakeCache.txt来为该目录标记并存储构建信息。(CMake支持将Build Tree置于Source Tree内(源内构建)，但不鼓励这样做)
+生成器: 进行CMake配置时使用 -G 选项来指定生成器(或者不写，保持默认)</p>
 <h2 id="_6">参考文档</h2>
 <p><a href="https://cliutils.gitlab.io/modern-cmake/README.html">https://cliutils.gitlab.io/modern-cmake/README.html</a><br />
 <a href="https://cmake.org/cmake/help/v3.20/index.html">https://cmake.org/cmake/help/v3.20/index.html</a><br />

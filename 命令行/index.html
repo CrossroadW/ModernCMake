@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>最小的CMake构建可执行程序的例子 - 现代CMake教程</title>
+        <title>命令行 - 现代CMake教程</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -44,7 +44,7 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">章节列表</a>
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">章节列表</a>
                                 <ul class="dropdown-menu">
                                     
 <li>
@@ -60,7 +60,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">最小的CMake构建可执行程序的例子</a>
+    <a href="../%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="dropdown-item">最小的CMake构建可执行程序的例子</a>
 </li>
                                     
 <li>
@@ -83,16 +83,6 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li class="nav-item">
-                                <a rel="prev" href="../%E7%8E%B0%E4%BB%A3CMake%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/" class="nav-link">
-                                    <i class="fa fa-arrow-left"></i> Previous
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a rel="next" href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="nav-link">
-                                    Next <i class="fa fa-arrow-right"></i>
-                                </a>
-                            </li>
                     </ul>
                 </div>
             </div>
@@ -111,114 +101,12 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#cmake" class="nav-link">最小的CMake构建可执行程序的例子</a>
-              <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#cmake_2" class="nav-link">CMake 配置文件内容的写什么？</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-              </ul>
-            </li>
         </ul>
     </div>
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="cmake">最小的CMake构建可执行程序的例子</h1>
-<p>在本节中，我们将从零开始创建一个简单的 C++ 项目，展示如何使用 CMake 构建一个可执行文件。</p>
-<h3 id="_1"><strong>准备源代码与配置文件</strong></h3>
-<p>创建 main.cpp 文件，内容如下：</p>
-<pre><code class="language-cpp">// main.cpp
-#include &lt;iostream&gt;
-int main(){
-    puts(&quot;hello cmake&quot;);
-}
-</code></pre>
-<p>接下来，在项目目录下创建 CMakeLists.txt 文件，内容如下：</p>
-<pre><code class="language-cmake">
-# 设置 CMake 的最低版本
-cmake_minimum_required(VERSION 3.20)
-
-# 设置项目名称
-project(MinimalCMakeProject)
-
-# 定义一个可执行文件
-# 第一个参数是目标名称，第二个参数是源文件路径
-add_executable(hello_cmake main.cpp)
-</code></pre>
-<h3 id="_2">配置项目</h3>
-<p>在项目根目录下，创建一个独立的构建目录(也称为源外构建)。</p>
-<blockquote>
-<p>为什么使用独立构建目录？
-这样可以将生成的构建文件与源代码分离，保持项目目录整洁，便于管理。</p>
-</blockquote>
-<pre><code class="language-bash">cmake -S . -B build
-</code></pre>
-<p><code>-S .</code> 表示让 CMake 查找当前目录中的 CMakeLists.txt 文件，<code>-B build</code> 指定构建文件存放在 build 目录。执行后，CMake 会生成平台相关的构建文件。
-成功后，终端将输出类似以下内容：</p>
-<pre><code class="language-bash">awe@build$ cmake ..
--- The C compiler identification is GNU 14.2.1
--- The CXX compiler identification is GNU 14.2.1
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Check for working C compiler: /usr/bin/cc - skipped
--- Detecting C compile features
--- Detecting C compile features - done
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: /usr/bin/c++ - skipped
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Configuring done (0.5s)
--- Generating done (0.0s)
--- Build files have been written to: /home/awe/Desktop/code/node/Modern-CMake/examples/step1/build
-</code></pre>
-<h3 id="_3">生成项目</h3>
-<p>在CMakeLists.txt所在目录中运行以下命令：</p>
-<pre><code class="language-bash">cmake --build build
-</code></pre>
-<p>成功后，你将看到类似如下输出：</p>
-<pre><code class="language-bash">awe@build$ cmake --build .
-[ 50%] Building CXX object CMakeFiles/hello_cmake.dir/main.cpp.o
-[100%] Linking CXX executable hello_cmake
-[100%] Built target hello_cmake
-</code></pre>
-<p>编译完成后，可执行文件会出现在 build 目录下，运行它：</p>
-<pre><code class="language-bash">./build/hello_cmake
-</code></pre>
-<p>最终可执行目录结构:</p>
-<pre><code class="language-bash">awe@step1$ tree -L 2
-.
-├── build
-│   ├── CMakeCache.txt
-│   ├── CMakeFiles
-│   ├── cmake_install.cmake
-│   ├── hello_cmake
-│   └── Makefile
-├── CMakeLists.txt
-└── main.cpp
-</code></pre>
-<h3 id="cmake_1">为什么CMake构建过程分为两步？</h3>
-<p><strong>配置阶段</strong> (<code>cmake -S . -B build</code>)：配置阶段只解析项目结构和生成规则，不执行实际的编译工作。</p>
-<pre><code>配置阶段,CMake会解析 CMakeLists.txt 文件，生成适合当前平台的构建文件（如 Makefile 或 Visual Studio 工程文件.sln等）。
-</code></pre>
-<p><strong>生成阶段</strong>(<code>cmake --build build</code>)：</p>
-<blockquote>
-<p>tips: cmake --build build -v 可以输出具体的编译过程</p>
-</blockquote>
-<pre><code>CMake使用第一步生成的构建文件，通过构建文件调用对应的构建工具(msbuild、make、ninja)完成构建，构建工具来调用具体的编译器（如 g++、clang++ 或 cl.exe）进行编译，生成目标文件（如可执行文件.exe或库）。
-</code></pre>
-<h2 id="cmake_2">CMake 配置文件内容的写什么？</h2>
-<p>CMake 配置文件的核心作用是告诉 CMake 如何将<code>源代码和库文件</code>转换为<code>可执行文件或其他目标</code>。</p>
-<p>在现代 CMake 中，构建的核心是<a href="现代CMake的核心概念/#coreconcept">Target</a>。Target 可以是可执行文件、库文件，甚至是自定义命令。
-一个基本的程序至少有一个 Target，以下是一个简单的例子：</p>
-<pre><code class="language-cmake"># CMake要求第一行必须是cmake_minimum_required
-cmake_minimum_required(VERSION 3.20)
-# 一个项目的根CMakeLists.txt必须要有项目名字
-project(MinimalCMakeProject)
-
-add_executable(hello_cmake main.cpp)
-</code></pre></div>
+<h3 id="_1"></h3></div>
             </div>
         </div>
 

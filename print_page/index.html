@@ -68,6 +68,14 @@
 <li>
     <a href="../%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="dropdown-item">最小的CMake构建可执行程序的例子</a>
 </li>
+                                    
+<li>
+    <a href="../todo.md" class="dropdown-item">todo...</a>
+</li>
+                                    
+<li>
+    <a href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="dropdown-item">基本常识</a>
+</li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -117,10 +125,14 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="1"><a href="#%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86" class="nav-link">5. 基本常识</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
             
-            <li class="nav-item" data-bs-level="0"><a href="#about" class="nav-link">5. 关于</a>
+            <li class="nav-item" data-bs-level="0"><a href="#about" class="nav-link">6. 关于</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -200,6 +212,14 @@ $ ./step1
 <p><a id="metabuildsystem"></a></p>
 <h4 id="index-metabuildsystem">元构建系统(metabuildsystem):</h4>
 <p>元构建系统即一个生成其他构建系统的构建系统。如:<a href="https://gyp.gsrc.io/">GYP</a>(Generate Your Projects)</p>
+<h4 id="index-cmake_2">CMake与构建系统关系</h4>
+<p>构建系统：将开发者写的的<code>源代码</code>转换为可供机器读取的二进制文件。
+例如:构建系统可以是make和项目的Makefile(也可以是IDE的项目文件)组合成的项目文件。
+CMake通过generator这一<code>后端</code>生成适用于每个机器的构建系统。
+生成构建系统需要三个要素：
+Source Tree(源代码目录):包含源代码的项目顶级目录，从名为CMakeLists.txt文件开始。
+Build Tree(构建树目录)：存储构建系统的顶级目录，CMake会生成有CMakeCache.txt来为该目录标记并存储构建信息。(CMake支持将Build Tree置于Source Tree内(源内构建)，但不鼓励这样做)
+生成器: 进行CMake配置时使用 -G 选项来指定生成器(或者不写，保持默认)</p>
 <h2 id="index-_6">参考文档</h2>
 <p><a href="https://cliutils.gitlab.io/modern-cmake/README.html">https://cliutils.gitlab.io/modern-cmake/README.html</a><br />
 <a href="https://cmake.org/cmake/help/v3.20/index.html">https://cmake.org/cmake/help/v3.20/index.html</a><br />
@@ -317,20 +337,15 @@ project(MinimalCMakeProject)
 # 第一个参数是目标名称，第二个参数是源文件路径
 add_executable(hello_cmake main.cpp)
 </code></pre>
-<h3 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-_2">构建和运行项目</h3>
-<p>在项目根目录下，创建一个独立的构建目录(也称为原外构建)。</p>
+<h3 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-_2">配置项目</h3>
+<p>在项目根目录下，创建一个独立的构建目录(也称为源外构建)。</p>
 <blockquote>
 <p>为什么使用独立构建目录？
 这样可以将生成的构建文件与源代码分离，保持项目目录整洁，便于管理。</p>
 </blockquote>
-<pre><code class="language-bash">mkdir build
-cd build
-cmake ..
+<pre><code class="language-bash">cmake -S . -B build
 </code></pre>
-<p><code>..</code> 表示让 CMake 查找上级目录中的 CMakeLists.txt 文件。
-执行后，CMake 会生成平台相关的构建文件，比如：
-在 Linux 上，会生成 Makefile。
-在 Windows 上，会生成 Visual Studio 工程文件。
+<p><code>-S .</code> 表示让 CMake 查找当前目录中的 CMakeLists.txt 文件，<code>-B build</code> 指定构建文件存放在 build 目录。执行后，CMake 会生成平台相关的构建文件。
 成功后，终端将输出类似以下内容：</p>
 <pre><code class="language-bash">awe@build$ cmake ..
 -- The C compiler identification is GNU 14.2.1
@@ -349,11 +364,9 @@ cmake ..
 -- Generating done (0.0s)
 -- Build files have been written to: /home/awe/Desktop/code/node/Modern-CMake/examples/step1/build
 </code></pre>
-<ol>
-<li>编译项目
-在 build 目录中运行以下命令：</li>
-</ol>
-<pre><code class="language-bash">cmake --build .
+<h3 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-_3">生成项目</h3>
+<p>在CMakeLists.txt所在目录中运行以下命令：</p>
+<pre><code class="language-bash">cmake --build build
 </code></pre>
 <p>成功后，你将看到类似如下输出：</p>
 <pre><code class="language-bash">awe@build$ cmake --build .
@@ -362,7 +375,7 @@ cmake ..
 [100%] Built target hello_cmake
 </code></pre>
 <p>编译完成后，可执行文件会出现在 build 目录下，运行它：</p>
-<pre><code class="language-bash">./hello_cmake
+<pre><code class="language-bash">./build/hello_cmake
 </code></pre>
 <p>最终可执行目录结构:</p>
 <pre><code class="language-bash">awe@step1$ tree -L 2
@@ -377,18 +390,120 @@ cmake ..
 └── main.cpp
 </code></pre>
 <h3 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmake_1">为什么CMake构建过程分为两步？</h3>
-<p><strong>配置阶段</strong> (Configuration)：配置阶段只解析项目结构和生成规则，不执行实际的编译工作。</p>
+<p><strong>配置阶段</strong> (<code>cmake -S . -B build</code>)：配置阶段只解析项目结构和生成规则，不执行实际的编译工作。</p>
+<pre><code>配置阶段,CMake会解析 CMakeLists.txt 文件，生成适合当前平台的构建文件（如 Makefile 或 Visual Studio 工程文件.sln等）。
+</code></pre>
+<p><strong>生成阶段</strong>(<code>cmake --build build</code>)：</p>
 <blockquote>
-<p>配置阶段,CMake会解析 CMakeLists.txt 文件，生成适合当前平台的构建文件（如 Makefile 或 Visual Studio 工程文件.sln等）。</p>
+<p>tips: cmake --build build -v 可以输出具体的编译过程</p>
 </blockquote>
-<p><strong>构建阶段</strong>(Build)：</p>
 <pre><code>CMake使用第一步生成的构建文件，通过构建文件调用对应的构建工具(msbuild、make、ninja)完成构建，构建工具来调用具体的编译器（如 g++、clang++ 或 cl.exe）进行编译，生成目标文件（如可执行文件.exe或库）。
 </code></pre>
-<h2 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmake_2">CMake配置文件写什么？</h2>
-<p>CMake无非是根据输入源代码文件(.cpp)和库文件(.lib .a .so)等加工成可执行文件，至少要告诉CMake输入的源文件是什么。
- 现代CMake构建围绕Target展开，Target可以是可执行文件(.exe),也可是库文件(.lib .a .so)，
- 甚至是命令(自定义Target)。
- 对于Windows而言动态库是dll后缀文件，但是windows上无法直接链接.dll，一般是链接生成的.dll的对应的.lib文件，这一步仅仅是能够编译，给编译器提供对应的库信息，在运行时需要动态库在系统的搜索路径下(windows是环境变量PATH中罗列的目录，也可以直接将dll置于exe所在目录，linux一般定义环境变量LD_LIBRARY_PATH所在目录)</p></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1><section class="print-page" id="about"><h1 id="about-hello-about">hello about</h1></section></div></div>
+<h2 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmake_2">CMake 配置文件内容的写什么？</h2>
+<p>CMake 配置文件的核心作用是告诉 CMake 如何将<code>源代码和库文件</code>转换为<code>可执行文件或其他目标</code>。</p>
+<p>在现代 CMake 中，构建的核心是<a href="#%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-现代cmake的核心概念-coreconcept">Target</a>。Target 可以是可执行文件、库文件，甚至是自定义命令。
+一个基本的程序至少有一个 Target，以下是一个简单的例子：</p>
+<pre><code class="language-cmake"># CMake要求第一行必须是cmake_minimum_required
+cmake_minimum_required(VERSION 3.20)
+# 一个项目的根CMakeLists.txt必须要有项目名字
+project(MinimalCMakeProject)
+
+add_executable(hello_cmake main.cpp)
+</code></pre></section><section class="print-page" id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86"><h1 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_1">基本常识</h1>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_2">动态库链接</h4>
+<p>在 Windows 上，动态库使用 .dll 后缀，但编译器无法直接链接 .dll 文件。通常，我们链接 .dll 对应的 .lib 文件，提供编译时的库信息。
+在 Linux 上，直接链接.so既可。
+运行时动态库搜索路径</p>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_3">运行时动态库搜索路径</h4>
+<ul>
+<li>Windows：动态库必须位于系统的搜索路径中，如通过环境变量 PATH 指定，或者直接放在可执行文件所在目录。</li>
+<li>Linux：运行时动态库通过环境变量 LD_LIBRARY_PATH 查找，确保动态库在执行时可被找到。</li>
+</ul>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_4">生成器</h4>
+<p>CMake支持多种生成器来支持不同的构建系统，默认的生成器是(cmake --help 输出中带<code>*</code>标记的generator)
+可以设置环境变量CMAKE_GENERATOR来改变默认生成器(CMake 3.15+）)。</p>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_5">缓存变量</h4>
+<p>CMake 支持缓存变量，它们存储在<code>构建目录</code>中的 <code>CMakeCache.txt</code> 文件中。调用 CMake 时使用 -D 参数传递的变量会自动作为缓存变量保存。
+缓存变量与普通变量的区别:
+- 普通变量：定义在 CMakeLists.txt 中，具有动态作用域，仅在当前 CMakeLists.txt 或作用域中有效。
+- 缓存变量：全局可见，存在于整个 CMake 配置过程中，即使 CMakeLists.txt 的变量被修改，缓存变量的值不会自动更新，除非强制修改或清除缓存。</p>
+<p>创建缓存变量的方式：
+- 通过命令行 -D 参数：<code>cmake -DCMAKE_BUILD_TYPE=Release</code>
+- 使用 option 命令创建布尔缓存变量<code>option(ENABLE_FEATURE_A "feature a" ON)</code>
+- 使用 set 命令指定缓存类型：<code>set(VAR "value" CACHE STRING "注释")</code></p>
+<blockquote>
+<p>注意: 历史原因，缓存变量修改必须使用set的带<mark>FORCE</mark>版本(VAR "value" CACHE STRING "注释" FORCE)</p>
+</blockquote>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-cmake">CMake配置的多种方式</h4>
+<ol>
+<li>使用当前工作目录作为构建树，使用 <path-to-source> 作为源代码目录。</li>
+<li>使用 <path-to-existing-build> 作为构建树，并从其 CMakeCache.txt 文件加载源树的路径。</li>
+<li>使用 <path-to-build> 作为构建树，使用 <path-to-source> 作为源树(推荐)。<blockquote>
+<p>如果仅给出一种类型的路径，则当前工作目录 (cwd) 将用于另一种路径。例如：</p>
+</blockquote>
+</li>
+</ol>
+<pre><code class="language-bash">cmake [options] &lt;path-to-source&gt;
+cmake [options] &lt;path-to-existing-build&gt;
+cmake [options] -S &lt;path-to-source&gt; -B &lt;path-to-build&gt;
+</code></pre>
+<h3 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-cmake_1">CMake标识符规则</h3>
+<p>CMake命令不去分大小写。
+CMake 保留以下标识符（无论是大写、小写或混合大小写）：
+- 以CMAKE_开头
+- <em>CMAKE</em>
+- _后跟人呢会CMake Command</p>
+<h3 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-cmakeliststxt">CMakeLists.txt 内文件路径的查找规则</h3>
+<ul>
+<li>
+<p><strong>绝对路径</strong>：直接按照文件系统中的实际路径查找，无需依赖当前目录。</p>
+</li>
+<li>
+<p><strong>相对路径</strong>：  </p>
+</li>
+<li><strong>一般情况下</strong>：相对路径是相对于当前 CMakeLists.txt 文件所在的目录。例如，<code>add_executable()</code> 或 <code>add_library()</code> 等命令使用的文件路径，都会以当前 CMakeLists.txt 的目录作为基准。  </li>
+<li><strong>特殊情况</strong>：当使用 <code>include(script.cmake)</code> 或 <code>find_package()</code> 等命令时，路径会相对于调用这些命令的 CMakeLists.txt 文件所在的目录，而不是被包含的脚本文件。</li>
+</ul>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_6">示例</h4>
+<p>假设目录结构如下：</p>
+<pre><code>project/
+├── CMakeLists.txt
+├── src/
+│   ├── CMakeLists.txt
+│   └── main.cpp
+├── scripts/
+│   └── setup.cmake
+</code></pre>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_7">示例代码</h4>
+<ol>
+<li><strong>CMakeLists.txt 中的相对路径</strong><br />
+   顶层的 CMakeLists.txt：
+   ```cmake
+   cmake_minimum_required(VERSION 3.20)
+   project(DemoProject)</li>
+</ol>
+<p>add_subdirectory(src)
+   include(scripts/setup.cmake) # 按照当前 CMakeLists.txt 的路径查找
+   ```</p>
+<ol>
+<li>
+<p><strong><code>add_subdirectory</code> 子目录中的相对路径</strong><br />
+<code>src/CMakeLists.txt</code>：
+   <code>cmake
+   add_executable(main_app main.cpp) # 相对于 src/CMakeLists.txt</code></p>
+</li>
+<li>
+<p><strong><code>include()</code> 的路径规则</strong><br />
+   假设 <code>scripts/setup.cmake</code> 中有以下内容：
+   <code>cmake
+   message("正在处理的cmake文件路径： ${CMAKE_CURRENT_LIST_DIR}") # 打印 scripts/setup.cmake 的所在目录
+   message("当前所在的CMakeLists文件路径： ${CMAKE_CURRENT_SOURCE_DIR}") # 打印src/CMakeLists.txt 的所在目录
+   CMAKE_CURRENT_SOURCE_DIR</code></p>
+</li>
+</ol>
+<p>运行时输出：
+   <code>正在处理的cmake文件路径： /path_to_project/scripts
+   当前所在的CMakeLists文件路径：/path_to_project/</code></p></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1><section class="print-page" id="about"><h1 id="about-hello-about">hello about</h1></section></div></div>
             </div>
         </div>
 
