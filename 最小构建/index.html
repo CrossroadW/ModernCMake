@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>最小的CMake构建可执行程序的例子 - 现代CMake教程</title>
+        <title>最小的CMakeLists案例 - 现代CMake教程</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -60,17 +60,28 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">最小的CMake构建可执行程序的例子</a>
+    <a href="./" class="dropdown-item active" aria-current="page">最小的CMakeLists案例</a>
 </li>
                                     
 <li>
-    <a href="../todo.md" class="dropdown-item">todo...</a>
+    <a href="../todo/" class="dropdown-item">todo...</a>
+</li>
+                                    
+<li>
+    <a href="../find_package%E6%A1%88%E4%BE%8B/" class="dropdown-item">find_package案例</a>
 </li>
                                     
 <li>
     <a href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="dropdown-item">基本常识</a>
 </li>
+                                    
+<li>
+    <a href="../%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5/" class="dropdown-item">参考文档</a>
+</li>
                                 </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="nav-link">基本常识</a>
                             </li>
                             <li class="nav-item">
                                 <a href="../about/" class="nav-link">关于</a>
@@ -89,7 +100,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="nav-link">
+                                <a rel="next" href="../todo/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -111,9 +122,9 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#cmake" class="nav-link">最小的CMake构建可执行程序的例子</a>
+            <li class="nav-item" data-bs-level="1"><a href="#cmakelists" class="nav-link">最小的CMakeLists案例</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#cmake_2" class="nav-link">CMake 配置文件内容的写什么？</a>
+            <li class="nav-item" data-bs-level="2"><a href="#cmake_1" class="nav-link">CMake 配置文件内容的写什么？</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -124,7 +135,7 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="cmake">最小的CMake构建可执行程序的例子</h1>
+<h1 id="cmakelists">最小的CMakeLists案例</h1>
 <p>在本节中，我们将从零开始创建一个简单的 C++ 项目，展示如何使用 CMake 构建一个可执行文件。</p>
 <h3 id="_1"><strong>准备源代码与配置文件</strong></h3>
 <p>创建 main.cpp 文件，内容如下：</p>
@@ -198,9 +209,9 @@ add_executable(hello_cmake main.cpp)
 ├── CMakeLists.txt
 └── main.cpp
 </code></pre>
-<h3 id="cmake_1">为什么CMake构建过程分为两步？</h3>
+<h3 id="cmake">为什么CMake构建过程分为两步？</h3>
 <p><strong>配置阶段</strong> (<code>cmake -S . -B build</code>)：配置阶段只解析项目结构和生成规则，不执行实际的编译工作。</p>
-<pre><code>配置阶段,CMake会解析 CMakeLists.txt 文件，生成适合当前平台的构建文件（如 Makefile 或 Visual Studio 工程文件.sln等）。
+<pre><code>配置阶段,CMake会解析 CMakeLists.txt 文件，生成适合当前平台的构建文件（如 Makefile 或 Visual Studio 工程文件.sln等；对于现在的IDE,VS,CLion等都会在CMakeLists.txt文件更新后(半)自动配置，不必手动完成），而且配置过程是有缓存的,第一次构建后第二次配置可以,CMake build/ 直接指定上次构建的缓存，每次增量更新`cmake build/ -DCMAKE_XXX=YYY`(不不过这些构建缓存一般也不能迁移到其他目录，cmake无法保证这个）。
 </code></pre>
 <p><strong>生成阶段</strong>(<code>cmake --build build</code>)：</p>
 <blockquote>
@@ -208,17 +219,60 @@ add_executable(hello_cmake main.cpp)
 </blockquote>
 <pre><code>CMake使用第一步生成的构建文件，通过构建文件调用对应的构建工具(msbuild、make、ninja)完成构建，构建工具来调用具体的编译器（如 g++、clang++ 或 cl.exe）进行编译，生成目标文件（如可执行文件.exe或库）。
 </code></pre>
-<h2 id="cmake_2">CMake 配置文件内容的写什么？</h2>
+<h2 id="cmake_1">CMake 配置文件内容的写什么？</h2>
 <p>CMake 配置文件的核心作用是告诉 CMake 如何将<code>源代码和库文件</code>转换为<code>可执行文件或其他目标</code>。</p>
-<p>在现代 CMake 中，构建的核心是<a href="现代CMake的核心概念/#coreconcept">Target</a>。Target 可以是可执行文件、库文件，甚至是自定义命令。
+<p>在现代 CMake 中，构建的核心是<a href="/现代CMake的核心概念/#coreconcept">Target</a>。Target 可以是可执行文件、库文件，甚至是自定义命令。
 一个基本的程序至少有一个 Target，以下是一个简单的例子：</p>
-<pre><code class="language-cmake"># CMake要求第一行必须是cmake_minimum_required
+<pre><code class="language-cmake"># CMake要求第一行必须是cmake_minimum_required VERSION推荐3.20起步，
 cmake_minimum_required(VERSION 3.20)
-# 一个项目的根CMakeLists.txt必须要有项目名字
+# CMake规定一个项目的根CMakeLists.txt必须要有项目名字。
 project(MinimalCMakeProject)
 
 add_executable(hello_cmake main.cpp)
-</code></pre></div>
+</code></pre>
+<details>
+<summary>上文CMake命令详解</summary>
+<div style="padding-left: 2em;">
+    <h3>1. cmake_minimum_required</h3>
+    <p>
+        <strong>推荐版本：</strong>从 3.20 起步。<br>
+        此命令不仅要求 CMake 的最低版本，还会设定策略版本。
+    </p>
+    <p><strong>等价命令：</strong><br>
+        <code>cmake_policy(VERSION 3.20)</code>
+    </p>
+    <p>CMake 中的策略版本用于在多个版本之间保留向后兼容的行为。</p>
+
+    <hr>
+
+    <h3>2. project</h3>
+    <p>project 命令可以设置以下内容：</p>
+    <ul>
+        <li><strong>VERSION</strong>: 项目的版本号。</li>
+        <li><strong>DESCRIPTION</strong>: 项目的描述。</li>
+        <li><strong>HOMEPAGE_URL</strong>: 项目主页地址。</li>
+        <li><strong>LANGUAGES</strong>: 项目支持的编程语言。</li>
+    </ul>
+    <p>
+        调用 <code>project</code> 后，会定义一系列有用的变量，例如：
+    </p>
+    <ul>
+        <li><strong>PROJECT_SOURCE_DIR</strong>: 项目源码的根目录。</li>
+        <li><strong>&lt;PROJECT-NAME&gt;_SOURCE_DIR</strong>: 当前项目的源码目录。</li>
+    </ul>
+
+    <blockquote>
+        <strong>注意：</strong><br>
+        如果 <code>project</code> 位于顶层 CMakeLists.txt（根级别），会设置以下变量：
+        <ul>
+            <li><strong>CMAKE_PROJECT_NAME</strong>: 顶层项目的名称（仅根项目设置）。</li>
+            <li><strong>PROJECT_NAME</strong>: 当前项目的名称（最近调用的 <code>project</code> 命令覆盖之前的值）。</li>
+        </ul>
+    </blockquote>
+</div>
+</details>
+
+<p>下一章<a href="/find_package案例">find_package案例.md</a></p></div>
             </div>
         </div>
 

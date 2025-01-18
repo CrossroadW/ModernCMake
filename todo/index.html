@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>现代CMake的核心概念 - 现代CMake教程</title>
+        <title>todo... - 现代CMake教程</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -56,7 +56,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">现代CMake的核心概念</a>
+    <a href="../%E7%8E%B0%E4%BB%A3CMake%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/" class="dropdown-item">现代CMake的核心概念</a>
 </li>
                                     
 <li>
@@ -64,7 +64,7 @@
 </li>
                                     
 <li>
-    <a href="../todo/" class="dropdown-item">todo...</a>
+    <a href="./" class="dropdown-item active" aria-current="page">todo...</a>
 </li>
                                     
 <li>
@@ -95,12 +95,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="nav-link">
+                                <a rel="prev" href="../%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="nav-link">
+                                <a rel="next" href="../find_package%E6%A1%88%E4%BE%8B/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -122,12 +122,8 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#cmake" class="nav-link">现代CMake的核心概念</a>
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">这部分内容还未想好...</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#usage-requirements" class="nav-link">使用要求(Usage Requirements)</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
               </ul>
             </li>
         </ul>
@@ -135,39 +131,7 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="cmake">现代CMake的核心概念</h1>
-<p><a id="coreconcept"></a></p>
-<h3 id="_1">目标</h3>
-<p><strong><code>目标（Target）</code></strong>是现代CMake最核心的概念。目标代表了由CMake构建的可执行文件、库和自定义命令。每个add_library、add_executable和add_custom_target命令都会创建一个目标。
-每个对象可以附加属性，属性是附加到特定对象的键值对。  </p>
-<h4 id="_2">目标的主要特点</h4>
-<ul>
-<li>全局作用域：一旦创建，可在项目中任何地方引用。</li>
-<li>自动扩展名：CMake根据平台自动决定扩展名（如Windows下可执行文件为.exe）。</li>
-<li>动态查询修改：可用set_target_properties和get_target_property动态更新目标属性。</li>
-</ul>
-<p>可执行文件（Executable）：</p>
-<pre><code>通过add_executable命令创建。例如，add_executable(my_app main.cpp)会创建一个名为my_app的可执行文件，其源文件为main.cpp。
-</code></pre>
-<p>库（Library）：</p>
-<pre><code>通过add_library命令创建。例如，add_library(foo STATIC foo1.c foo2.c)会创建一个名为foo的静态库，其源文件为foo1.c和foo2.c。
-</code></pre>
-<p>自定义目标（Custom Target）：</p>
-<pre><code>通过add_custom_target命令创建，用于执行自定义的构建任务。
-</code></pre>
-<h2 id="usage-requirements">使用要求(Usage Requirements)</h2>
-<p>在 CMake 中，<code>使用要求</code>（Usage Requirements）也可以被称作“传播机制”，它指的是目标在构建时的要求，以及这些要求如何传播给其他链接到该目标的目标。可供选择的有<code>PUBLIC 、 PRIVATE 和 INTERFACE</code>。</p>
-<h3 id="_3">具体例子:</h3>
-<p>该例子表示任何链接(target_link_libraries)到目标 foo 的目标都会自动将 foo 的源代码目录作为包含目录，包括自身。</p>
-<pre><code class="language-cmake">add_library(foo foo.cpp)
-target_include_directories(foo PUBLIC &quot;${CMAKE_CURRENT_SOURCE_DIR}&quot;)
-</code></pre>
-<p>对于另外两种<code>使用要求</code>:</p>
-<ul>
-<li>使用 PRIVATE 时，只有 foo 目标本身<code>会</code>将源代码目录作为包含目录。其他链接到 foo 的目标<code>不会继承</code>这个包含目录设置。  </li>
-<li>使用 INTERFACE 时，foo 本身本身<code>不会</code>将源代码目录作为包含目录，而是一个仅供链接的目标。但是，其他链接到 foo 的目标都会自动继承 foo 设置的包含目录。</li>
-</ul>
-<p>下一章<a href="../%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/">最小构建.md</a></p></div>
+<h1 id="_1">这部分内容还未想好...</h1></div>
             </div>
         </div>
 

@@ -66,17 +66,28 @@
 </li>
                                     
 <li>
-    <a href="../%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="dropdown-item">最小的CMake构建可执行程序的例子</a>
+    <a href="../%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="dropdown-item">最小的CMakeLists案例</a>
 </li>
                                     
 <li>
-    <a href="../todo.md" class="dropdown-item">todo...</a>
+    <a href="../todo/" class="dropdown-item">todo...</a>
+</li>
+                                    
+<li>
+    <a href="../find_package%E6%A1%88%E4%BE%8B/" class="dropdown-item">find_package案例</a>
 </li>
                                     
 <li>
     <a href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="dropdown-item">基本常识</a>
 </li>
+                                    
+<li>
+    <a href="../%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5/" class="dropdown-item">参考文档</a>
+</li>
                                 </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="nav-link">基本常识</a>
                             </li>
                             <li class="nav-item">
                                 <a href="../about/" class="nav-link">关于</a>
@@ -121,18 +132,35 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba" class="nav-link">4. 最小的CMake构建可执行程序的例子</a>
+            <li class="nav-item" data-bs-level="1"><a href="#%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba" class="nav-link">4. 最小的CMakeLists案例</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86" class="nav-link">5. 基本常识</a>
+            <li class="nav-item" data-bs-level="1"><a href="#todo" class="nav-link">5. todo...</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="1"><a href="#find_package%e6%a1%88%e4%be%8b" class="nav-link">6. find_package案例</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="1"><a href="#%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86" class="nav-link">7. 基本常识</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="1"><a href="#%e5%8f%82%e8%80%83%e9%93%be%e6%8e%a5" class="nav-link">8. 参考文档</a>
               <ul class="nav flex-column">
               </ul>
             </li>
               </ul>
             </li>
             
-            <li class="nav-item" data-bs-level="0"><a href="#about" class="nav-link">6. 关于</a>
+            <li class="nav-item" data-bs-level="0"><a href="#%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86" class="nav-link">9. 基本常识</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="0"><a href="#about" class="nav-link">10. 关于</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -193,10 +221,8 @@ $ ./step1
 43
 </code></pre>
 <p>此外，如果需要同时构建 Debug 和 Release 版本，或者链接外部库，命令行的复杂度将迅速提升，效率也会大大降低。</p>
-<h2 id="index-_4">下一章<a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba">环境搭建</a></h2>
-<p><br></p>
-<p><br></p>
-<h2 id="index-_5">概念解释</h2>
+<hr />
+<h2 id="index-_4">概念解释</h2>
 <p><a id="buildsystem"></a></p>
 <h4 id="index-buildsystem"><a href="https://en.wikipedia.org/wiki/Software_build">构建</a>与构建系统(buildsystem):</h4>
 <blockquote>
@@ -220,18 +246,7 @@ CMake通过generator这一<code>后端</code>生成适用于每个机器的构�
 Source Tree(源代码目录):包含源代码的项目顶级目录，从名为CMakeLists.txt文件开始。
 Build Tree(构建树目录)：存储构建系统的顶级目录，CMake会生成有CMakeCache.txt来为该目录标记并存储构建信息。(CMake支持将Build Tree置于Source Tree内(源内构建)，但不鼓励这样做)
 生成器: 进行CMake配置时使用 -G 选项来指定生成器(或者不写，保持默认)</p>
-<h2 id="index-_6">参考文档</h2>
-<p><a href="https://cliutils.gitlab.io/modern-cmake/README.html">https://cliutils.gitlab.io/modern-cmake/README.html</a><br />
-<a href="https://cmake.org/cmake/help/v3.20/index.html">https://cmake.org/cmake/help/v3.20/index.html</a><br />
-<a href="https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/">https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/</a><br />
-<a href="https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction">https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction</a><br />
-<a href="https://ukabuer.me/blog/more-modern-cmake/">https://ukabuer.me/blog/more-modern-cmake/</a><br />
-<a href="https://www.bilibili.com/video/BV1Mw411M761/">https://www.bilibili.com/video/BV1Mw411M761/</a><br />
-<a href="https://www.bilibili.com/video/BV16P4y1g7MH">https://www.bilibili.com/video/BV16P4y1g7MH</a><br />
-<a href="https://crascit.com/professional-cmake/">https://crascit.com/professional-cmake/</a><br />
-<a href="https://zh.wikipedia.org/wiki/CMake">https://zh.wikipedia.org/wiki/CMake</a><br />
-<a href="https://github.com/Mq-b/CXX_LIB">https://github.com/Mq-b/CXX_LIB</a><br />
-<a href="https://bazel.build/basics?hl=zh-cn">https://bazel.build/basics?hl=zh-cn</a>  </p></section><section class="print-page" id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba"><h1 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake-c">CMake C++环境搭建</h1>
+<h2 id="index-_5">下一章<a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba">环境搭建</a></h2></section><section class="print-page" id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba"><h1 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake-c">CMake C++环境搭建</h1>
 <h2 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-c">C++编译器安装</h2>
 <p>本教程主要讲解Windows上编译器的安装，仅介绍下面三种安装方式：</p>
 <h3 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-1-visual-studio">1. Visual Studio[推荐]：</h3>
@@ -305,17 +320,37 @@ MinSizeRel：启用代码体积优化  </p>
 </ul>
 <p>下一章<a href="#%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5">现代CMake的核心概念</a></p></section><section class="print-page" id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5"><h1 id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5-cmake">现代CMake的核心概念</h1>
 <p><a id="coreconcept"></a></p>
-<h2 id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5-_1">目标:</h2>
-<p>目标（Target）是现代CMake最核心的概念。目标代表了由CMake构建的可执行文件、库和自定义命令。每个add_library、add_executable和add_custom_target命令都会创建一个目标。<br />
-<strong>特点</strong><br />
-- 全局作用域：可在项目中任何地方使用。
-- 自动扩展名：CMake根据平台自动决定扩展名（如Windows下可执行文件为.exe）。
-- 动态查询修改：可用set_target_properties和get_target_property动态更新目标属性。</p>
-<p>可执行文件（Executable）：通过add_executable命令创建。例如，add_executable(my_app main.cpp)会创建一个名为my_app的可执行文件，其源文件为main.cpp。</p>
-<p>库（Library）：通过add_library命令创建。例如，add_library(foo STATIC foo1.c foo2.c)会创建一个名为foo的静态库，其源文件为foo1.c和foo2.c。</p>
-<p>自定义目标（Custom Target）：通过add_custom_target命令创建，用于执行自定义的构建任务。</p>
-<h2 id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5-todo">TODO</h2>
-<p>下一章<a href="#%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba">最小构建.md</a></p></section><section class="print-page" id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba"><h1 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmake">最小的CMake构建可执行程序的例子</h1>
+<h3 id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5-_1">目标</h3>
+<p><strong><code>目标（Target）</code></strong>是现代CMake最核心的概念。目标代表了由CMake构建的可执行文件、库和自定义命令。每个add_library、add_executable和add_custom_target命令都会创建一个目标。
+每个对象可以附加属性，属性是附加到特定对象的键值对。  </p>
+<h4 id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5-_2">目标的主要特点</h4>
+<ul>
+<li>全局作用域：一旦创建，可在项目中任何地方引用。</li>
+<li>自动扩展名：CMake根据平台自动决定扩展名（如Windows下可执行文件为.exe）。</li>
+<li>动态查询修改：可用set_target_properties和get_target_property动态更新目标属性。</li>
+</ul>
+<p>可执行文件（Executable）：</p>
+<pre><code>通过add_executable命令创建。例如，add_executable(my_app main.cpp)会创建一个名为my_app的可执行文件，其源文件为main.cpp。
+</code></pre>
+<p>库（Library）：</p>
+<pre><code>通过add_library命令创建。例如，add_library(foo STATIC foo1.c foo2.c)会创建一个名为foo的静态库，其源文件为foo1.c和foo2.c。
+</code></pre>
+<p>自定义目标（Custom Target）：</p>
+<pre><code>通过add_custom_target命令创建，用于执行自定义的构建任务。
+</code></pre>
+<h2 id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5-usage-requirements">使用要求(Usage Requirements)</h2>
+<p>在 CMake 中，<code>使用要求</code>（Usage Requirements）也可以被称作“传播机制”，它指的是目标在构建时的要求，以及这些要求如何传播给其他链接到该目标的目标。可供选择的有<code>PUBLIC 、 PRIVATE 和 INTERFACE</code>。</p>
+<h3 id="%e7%8e%b0%e4%bb%a3cmake%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5-_3">具体例子:</h3>
+<p>该例子表示任何链接(target_link_libraries)到目标 foo 的目标都会自动将 foo 的源代码目录作为包含目录，包括自身。</p>
+<pre><code class="language-cmake">add_library(foo foo.cpp)
+target_include_directories(foo PUBLIC &quot;${CMAKE_CURRENT_SOURCE_DIR}&quot;)
+</code></pre>
+<p>对于另外两种<code>使用要求</code>:</p>
+<ul>
+<li>使用 PRIVATE 时，只有 foo 目标本身<code>会</code>将源代码目录作为包含目录。其他链接到 foo 的目标<code>不会继承</code>这个包含目录设置。  </li>
+<li>使用 INTERFACE 时，foo 本身本身<code>不会</code>将源代码目录作为包含目录，而是一个仅供链接的目标。但是，其他链接到 foo 的目标都会自动继承 foo 设置的包含目录。</li>
+</ul>
+<p>下一章<a href="#%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba">最小构建.md</a></p></section><section class="print-page" id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba"><h1 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmakelists">最小的CMakeLists案例</h1>
 <p>在本节中，我们将从零开始创建一个简单的 C++ 项目，展示如何使用 CMake 构建一个可执行文件。</p>
 <h3 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-_1"><strong>准备源代码与配置文件</strong></h3>
 <p>创建 main.cpp 文件，内容如下：</p>
@@ -389,9 +424,9 @@ add_executable(hello_cmake main.cpp)
 ├── CMakeLists.txt
 └── main.cpp
 </code></pre>
-<h3 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmake_1">为什么CMake构建过程分为两步？</h3>
+<h3 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmake">为什么CMake构建过程分为两步？</h3>
 <p><strong>配置阶段</strong> (<code>cmake -S . -B build</code>)：配置阶段只解析项目结构和生成规则，不执行实际的编译工作。</p>
-<pre><code>配置阶段,CMake会解析 CMakeLists.txt 文件，生成适合当前平台的构建文件（如 Makefile 或 Visual Studio 工程文件.sln等）。
+<pre><code>配置阶段,CMake会解析 CMakeLists.txt 文件，生成适合当前平台的构建文件（如 Makefile 或 Visual Studio 工程文件.sln等；对于现在的IDE,VS,CLion等都会在CMakeLists.txt文件更新后(半)自动配置，不必手动完成），而且配置过程是有缓存的,第一次构建后第二次配置可以,CMake build/ 直接指定上次构建的缓存，每次增量更新`cmake build/ -DCMAKE_XXX=YYY`(不不过这些构建缓存一般也不能迁移到其他目录，cmake无法保证这个）。
 </code></pre>
 <p><strong>生成阶段</strong>(<code>cmake --build build</code>)：</p>
 <blockquote>
@@ -399,17 +434,198 @@ add_executable(hello_cmake main.cpp)
 </blockquote>
 <pre><code>CMake使用第一步生成的构建文件，通过构建文件调用对应的构建工具(msbuild、make、ninja)完成构建，构建工具来调用具体的编译器（如 g++、clang++ 或 cl.exe）进行编译，生成目标文件（如可执行文件.exe或库）。
 </code></pre>
-<h2 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmake_2">CMake 配置文件内容的写什么？</h2>
+<h2 id="%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-cmake_1">CMake 配置文件内容的写什么？</h2>
 <p>CMake 配置文件的核心作用是告诉 CMake 如何将<code>源代码和库文件</code>转换为<code>可执行文件或其他目标</code>。</p>
-<p>在现代 CMake 中，构建的核心是<a href="#%e6%9c%80%e5%b0%8f%e6%9e%84%e5%bb%ba-现代cmake的核心概念-coreconcept">Target</a>。Target 可以是可执行文件、库文件，甚至是自定义命令。
+<p>在现代 CMake 中，构建的核心是<a href="#现代cmake的核心概念-coreconcept">Target</a>。Target 可以是可执行文件、库文件，甚至是自定义命令。
 一个基本的程序至少有一个 Target，以下是一个简单的例子：</p>
-<pre><code class="language-cmake"># CMake要求第一行必须是cmake_minimum_required
+<pre><code class="language-cmake"># CMake要求第一行必须是cmake_minimum_required VERSION推荐3.20起步，
 cmake_minimum_required(VERSION 3.20)
-# 一个项目的根CMakeLists.txt必须要有项目名字
+# CMake规定一个项目的根CMakeLists.txt必须要有项目名字。
 project(MinimalCMakeProject)
 
 add_executable(hello_cmake main.cpp)
-</code></pre></section><section class="print-page" id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86"><h1 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_1">基本常识</h1>
+</code></pre>
+<details>
+<summary>上文CMake命令详解</summary>
+<div style="padding-left: 2em;">
+    <h3>1. cmake_minimum_required</h3>
+    <p>
+        <strong>推荐版本：</strong>从 3.20 起步。<br>
+        此命令不仅要求 CMake 的最低版本，还会设定策略版本。
+    </p>
+    <p><strong>等价命令：</strong><br>
+        <code>cmake_policy(VERSION 3.20)</code>
+    </p>
+    <p>CMake 中的策略版本用于在多个版本之间保留向后兼容的行为。</p>
+
+    <hr>
+
+    <h3>2. project</h3>
+    <p>project 命令可以设置以下内容：</p>
+    <ul>
+        <li><strong>VERSION</strong>: 项目的版本号。</li>
+        <li><strong>DESCRIPTION</strong>: 项目的描述。</li>
+        <li><strong>HOMEPAGE_URL</strong>: 项目主页地址。</li>
+        <li><strong>LANGUAGES</strong>: 项目支持的编程语言。</li>
+    </ul>
+    <p>
+        调用 <code>project</code> 后，会定义一系列有用的变量，例如：
+    </p>
+    <ul>
+        <li><strong>PROJECT_SOURCE_DIR</strong>: 项目源码的根目录。</li>
+        <li><strong>&lt;PROJECT-NAME&gt;_SOURCE_DIR</strong>: 当前项目的源码目录。</li>
+    </ul>
+
+    <blockquote>
+        <strong>注意：</strong><br>
+        如果 <code>project</code> 位于顶层 CMakeLists.txt（根级别），会设置以下变量：
+        <ul>
+            <li><strong>CMAKE_PROJECT_NAME</strong>: 顶层项目的名称（仅根项目设置）。</li>
+            <li><strong>PROJECT_NAME</strong>: 当前项目的名称（最近调用的 <code>project</code> 命令覆盖之前的值）。</li>
+        </ul>
+    </blockquote>
+</div>
+</details>
+
+<p>下一章<a href="#find_package案例">find_package案例.md</a></p></section><section class="print-page" id="todo"><h1 id="todo-_1">这部分内容还未想好...</h1></section><section class="print-page" id="find_package%e6%a1%88%e4%be%8b"><h1 id="find_package%e6%a1%88%e4%be%8b-find_package">find_package案例</h1>
+<p>这一章是一个 <strong><code>find_package</code> 案例</strong> 的案例，大部分初学者会经常因为这个命令找不到库而报错(明明别人能跑🤔)：  </p>
+<h3 id="find_package%e6%a1%88%e4%be%8b-1-find_package">1. <strong>find_package基础案例</strong></h3>
+<p>示例：<code>SDL2</code> 包并构建一个sdl2_demo。</p>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20)
+
+# 生成&lt;build_dir&gt;/compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+project(MinimalCMakeProject)
+
+add_executable(sdl2_demo main.cpp)
+
+# 查找SDL2库
+find_package(SDL2)
+target_link_libraries(sdl2_demo SDL2::SDL2)
+</code></pre>
+<h3 id="find_package%e6%a1%88%e4%be%8b-2-find_package">2. find_package详解</h3>
+<h4 id="find_package%e6%a1%88%e4%be%8b-_1">默认搜索模式</h4>
+<p><code>find_package</code> 基本语法：<br />
+<code>find_package(&lt;PackageName&gt; [&lt;version&gt;] [REQUIRED] [COMPONENTS &lt;components&gt;...])</code></p>
+<p><code>find_package</code> 找到一个包（通常由项目外部的东西提供），并加载其这个包。
+<code>find_package</code> 该命令有几种搜索包的模式,默认先按照模块模式搜索，后按照配置模式搜索：</p>
+<ul>
+<li>模块模式（Module mode相对较老，兼容老库）：<br />
+在此模式下，CMake 搜索名为<code>Find&lt;PackageName&gt;.cmake</code>的文件，首先在<code>CMAKE_MODULE_PATH</code>中列出的位置中查找，如果找到该文件，则由 CMake 读取并处理该文件。</li>
+<li>配置模式（Config Mode）: 
+     在此模式下，CMake 搜索名为的文件 &lt;lowercasePackageName&gt;-config.cmake 、<PackageName>Config.cmake，如果指定了<version>选项还会先查找 &lt;lowercasePackageName&gt;-config-version.cmake、<PackageName>ConfigVersion.cmake。  </li>
+</ul>
+<h4 id="find_package%e6%a1%88%e4%be%8b-_2">指定搜索模式</h4>
+<p><code>find_package</code>支持通过<code>MODULE|CONFIG</code>选项来选择某一种搜索模式
+<code>find_package(&lt;PackageName&gt; [...] [MODULE|CONFIG]</code>    </p>
+<p><code>find_package</code>查找会根据以下变量查找上文列出的.cmake文件(常用的)：
+CMAKE_PREFIX_PATH、&lt;PackageName&gt;_DIR、&lt;PackageName&gt;_ROOT、CMAKE_INSTALL_PREFIX(不推荐)、环境变量PATH。</p>
+<h4 id="find_package%e6%a1%88%e4%be%8b-_3">根据前缀搜索</h4>
+<p>一般是设置<strong><code>CMAKE_PREFIX_PATH</code></strong> ，主要靠它作为搜索<strong><code>前缀</code></strong>,其他变量必须指定到.cmake文件所在目录；不过对于&lt;PackageName&gt;_DIR是必须指定到.cmake所在目录的。
+搜索<strong><code>前缀</code></strong>的搜索规则(<a href="https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure">完整搜索规则参考</a>)：
+适用于unix系的约定:</p>
+<pre><code class="language-txt">&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/cmake/&lt;name&gt;*/
+
+&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/
+
+&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/(cmake|CMake)/
+</code></pre>
+<p>适用于unix/windows的约定：</p>
+<pre><code class="language-txt">&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/cmake/&lt;name&gt;*/
+
+&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/
+
+&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/(cmake|CMake)/
+</code></pre>
+<p>适用于mac的约定：</p>
+<pre><code class="language-txt">&lt;prefix&gt;/&lt;name&gt;.framework/Resources/CMake/
+
+&lt;prefix&gt;/&lt;name&gt;.framework/Versions/*/Resources/
+
+&lt;prefix&gt;/&lt;name&gt;.framework/Versions/*/Resources/CMake/
+</code></pre>
+<hr />
+<details>
+<summary>完整的 CMakeLists.txt 和 main.cpp 示例代码(examples/step3)</summary>
+
+<pre><code class="cmake">
+cmake_minimum_required(VERSION 3.20)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+# 创建可执行文件
+add_executable(find_lib_demo main.cpp)
+
+# 查找 SDL2 库
+find_package(SDL2)
+
+# 给find_lib_demo这个目标链接 SDL2 库
+target_link_libraries(find_lib_demo SDL2::SDL2)
+</code></pre>
+
+<pre><code class="cpp">
+#include &lt;SDL.h&gt;
+#include &lt;iostream&gt;
+
+int main(int argc, char* args[]) {
+    // 初始化SDL
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+        return -1;
+    }
+
+    // 创建窗口
+    SDL_Window* window = SDL_CreateWindow("SDL Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+    if (window == nullptr) {
+        std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        return -1;
+    }
+
+    // 创建渲染器
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer == nullptr) {
+        std::cerr << "Renderer could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return -1;
+    }
+
+    // 设置绘制颜色为蓝色
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+
+    // 清除屏幕
+    SDL_RenderClear(renderer);
+
+    // 绘制一个矩形
+    SDL_Rect rect = {100, 100, 200, 150};
+    SDL_RenderFillRect(renderer, &rect);
+
+    // 更新屏幕显示
+    SDL_RenderPresent(renderer);
+
+    // 事件处理
+    bool quit = false;
+    SDL_Event e;
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            }
+        }
+    }
+
+    // 释放资源并退出
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
+    return 0;
+}
+</code></pre>
+
+</details></section><section class="print-page" id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86"><h1 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_1">基本常识</h1>
 <h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_2">动态库链接</h4>
 <p>在 Windows 上，动态库使用 .dll 后缀，但编译器无法直接链接 .dll 文件。通常，我们链接 .dll 对应的 .lib 文件，提供编译时的库信息。
 在 Linux 上，直接链接.so既可。
@@ -503,7 +719,112 @@ CMake 保留以下标识符（无论是大写、小写或混合大小写）：
 </ol>
 <p>运行时输出：
    <code>正在处理的cmake文件路径： /path_to_project/scripts
-   当前所在的CMakeLists文件路径：/path_to_project/</code></p></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1><section class="print-page" id="about"><h1 id="about-hello-about">hello about</h1></section></div></div>
+   当前所在的CMakeLists文件路径：/path_to_project/</code></p></section><section class="print-page" id="%e5%8f%82%e8%80%83%e9%93%be%e6%8e%a5"><h1 id="%e5%8f%82%e8%80%83%e9%93%be%e6%8e%a5-_1">参考文档</h1>
+<p><a href="https://cliutils.gitlab.io/modern-cmake/README.html">https://cliutils.gitlab.io/modern-cmake/README.html</a><br />
+<a href="https://cmake.org/cmake/help/v3.20/index.html">https://cmake.org/cmake/help/v3.20/index.html</a><br />
+<a href="https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/">https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/</a><br />
+<a href="https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction">https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction</a><br />
+<a href="https://ukabuer.me/blog/more-modern-cmake/">https://ukabuer.me/blog/more-modern-cmake/</a><br />
+<a href="https://www.bilibili.com/video/BV1Mw411M761/">https://www.bilibili.com/video/BV1Mw411M761/</a><br />
+<a href="https://www.bilibili.com/video/BV16P4y1g7MH">https://www.bilibili.com/video/BV16P4y1g7MH</a><br />
+<a href="https://crascit.com/professional-cmake/">https://crascit.com/professional-cmake/</a><br />
+<a href="https://zh.wikipedia.org/wiki/CMake">https://zh.wikipedia.org/wiki/CMake</a><br />
+<a href="https://github.com/Mq-b/CXX_LIB">https://github.com/Mq-b/CXX_LIB</a><br />
+<a href="https://bazel.build/basics?hl=zh-cn">https://bazel.build/basics?hl=zh-cn</a>  </p></section><h1 class='nav-section-title-end'>Ended: 章节列表</h1><section class="print-page" id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86"><h1 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_1">基本常识</h1>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_2">动态库链接</h4>
+<p>在 Windows 上，动态库使用 .dll 后缀，但编译器无法直接链接 .dll 文件。通常，我们链接 .dll 对应的 .lib 文件，提供编译时的库信息。
+在 Linux 上，直接链接.so既可。
+运行时动态库搜索路径</p>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_3">运行时动态库搜索路径</h4>
+<ul>
+<li>Windows：动态库必须位于系统的搜索路径中，如通过环境变量 PATH 指定，或者直接放在可执行文件所在目录。</li>
+<li>Linux：运行时动态库通过环境变量 LD_LIBRARY_PATH 查找，确保动态库在执行时可被找到。</li>
+</ul>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_4">生成器</h4>
+<p>CMake支持多种生成器来支持不同的构建系统，默认的生成器是(cmake --help 输出中带<code>*</code>标记的generator)
+可以设置环境变量CMAKE_GENERATOR来改变默认生成器(CMake 3.15+）)。</p>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_5">缓存变量</h4>
+<p>CMake 支持缓存变量，它们存储在<code>构建目录</code>中的 <code>CMakeCache.txt</code> 文件中。调用 CMake 时使用 -D 参数传递的变量会自动作为缓存变量保存。
+缓存变量与普通变量的区别:
+- 普通变量：定义在 CMakeLists.txt 中，具有动态作用域，仅在当前 CMakeLists.txt 或作用域中有效。
+- 缓存变量：全局可见，存在于整个 CMake 配置过程中，即使 CMakeLists.txt 的变量被修改，缓存变量的值不会自动更新，除非强制修改或清除缓存。</p>
+<p>创建缓存变量的方式：
+- 通过命令行 -D 参数：<code>cmake -DCMAKE_BUILD_TYPE=Release</code>
+- 使用 option 命令创建布尔缓存变量<code>option(ENABLE_FEATURE_A "feature a" ON)</code>
+- 使用 set 命令指定缓存类型：<code>set(VAR "value" CACHE STRING "注释")</code></p>
+<blockquote>
+<p>注意: 历史原因，缓存变量修改必须使用set的带<mark>FORCE</mark>版本(VAR "value" CACHE STRING "注释" FORCE)</p>
+</blockquote>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-cmake">CMake配置的多种方式</h4>
+<ol>
+<li>使用当前工作目录作为构建树，使用 <path-to-source> 作为源代码目录。</li>
+<li>使用 <path-to-existing-build> 作为构建树，并从其 CMakeCache.txt 文件加载源树的路径。</li>
+<li>使用 <path-to-build> 作为构建树，使用 <path-to-source> 作为源树(推荐)。<blockquote>
+<p>如果仅给出一种类型的路径，则当前工作目录 (cwd) 将用于另一种路径。例如：</p>
+</blockquote>
+</li>
+</ol>
+<pre><code class="language-bash">cmake [options] &lt;path-to-source&gt;
+cmake [options] &lt;path-to-existing-build&gt;
+cmake [options] -S &lt;path-to-source&gt; -B &lt;path-to-build&gt;
+</code></pre>
+<h3 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-cmake_1">CMake标识符规则</h3>
+<p>CMake命令不去分大小写。
+CMake 保留以下标识符（无论是大写、小写或混合大小写）：
+- 以CMAKE_开头
+- <em>CMAKE</em>
+- _后跟人呢会CMake Command</p>
+<h3 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-cmakeliststxt">CMakeLists.txt 内文件路径的查找规则</h3>
+<ul>
+<li>
+<p><strong>绝对路径</strong>：直接按照文件系统中的实际路径查找，无需依赖当前目录。</p>
+</li>
+<li>
+<p><strong>相对路径</strong>：  </p>
+</li>
+<li><strong>一般情况下</strong>：相对路径是相对于当前 CMakeLists.txt 文件所在的目录。例如，<code>add_executable()</code> 或 <code>add_library()</code> 等命令使用的文件路径，都会以当前 CMakeLists.txt 的目录作为基准。  </li>
+<li><strong>特殊情况</strong>：当使用 <code>include(script.cmake)</code> 或 <code>find_package()</code> 等命令时，路径会相对于调用这些命令的 CMakeLists.txt 文件所在的目录，而不是被包含的脚本文件。</li>
+</ul>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_6">示例</h4>
+<p>假设目录结构如下：</p>
+<pre><code>project/
+├── CMakeLists.txt
+├── src/
+│   ├── CMakeLists.txt
+│   └── main.cpp
+├── scripts/
+│   └── setup.cmake
+</code></pre>
+<h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_7">示例代码</h4>
+<ol>
+<li><strong>CMakeLists.txt 中的相对路径</strong><br />
+   顶层的 CMakeLists.txt：
+   ```cmake
+   cmake_minimum_required(VERSION 3.20)
+   project(DemoProject)</li>
+</ol>
+<p>add_subdirectory(src)
+   include(scripts/setup.cmake) # 按照当前 CMakeLists.txt 的路径查找
+   ```</p>
+<ol>
+<li>
+<p><strong><code>add_subdirectory</code> 子目录中的相对路径</strong><br />
+<code>src/CMakeLists.txt</code>：
+   <code>cmake
+   add_executable(main_app main.cpp) # 相对于 src/CMakeLists.txt</code></p>
+</li>
+<li>
+<p><strong><code>include()</code> 的路径规则</strong><br />
+   假设 <code>scripts/setup.cmake</code> 中有以下内容：
+   <code>cmake
+   message("正在处理的cmake文件路径： ${CMAKE_CURRENT_LIST_DIR}") # 打印 scripts/setup.cmake 的所在目录
+   message("当前所在的CMakeLists文件路径： ${CMAKE_CURRENT_SOURCE_DIR}") # 打印src/CMakeLists.txt 的所在目录
+   CMAKE_CURRENT_SOURCE_DIR</code></p>
+</li>
+</ol>
+<p>运行时输出：
+   <code>正在处理的cmake文件路径： /path_to_project/scripts
+   当前所在的CMakeLists文件路径：/path_to_project/</code></p></section><section class="print-page" id="about"><h1 id="about-hello-about">hello about</h1></section></div></div>
             </div>
         </div>
 

@@ -60,17 +60,28 @@
 </li>
                                     
 <li>
-    <a href="%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="dropdown-item">最小的CMake构建可执行程序的例子</a>
+    <a href="%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="dropdown-item">最小的CMakeLists案例</a>
 </li>
                                     
 <li>
-    <a href="todo.md" class="dropdown-item">todo...</a>
+    <a href="todo/" class="dropdown-item">todo...</a>
+</li>
+                                    
+<li>
+    <a href="find_package%E6%A1%88%E4%BE%8B/" class="dropdown-item">find_package案例</a>
 </li>
                                     
 <li>
     <a href="%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="dropdown-item">基本常识</a>
 </li>
+                                    
+<li>
+    <a href="%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5/" class="dropdown-item">参考文档</a>
+</li>
                                 </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="nav-link">基本常识</a>
                             </li>
                             <li class="nav-item">
                                 <a href="about/" class="nav-link">关于</a>
@@ -121,15 +132,11 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_4" class="nav-link">下一章环境搭建</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_4" class="nav-link">概念解释</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_5" class="nav-link">概念解释</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_6" class="nav-link">参考文档</a>
+            <li class="nav-item" data-bs-level="2"><a href="#_5" class="nav-link">下一章环境搭建</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -180,10 +187,8 @@ $ ./step1
 43
 </code></pre>
 <p>此外，如果需要同时构建 Debug 和 Release 版本，或者链接外部库，命令行的复杂度将迅速提升，效率也会大大降低。</p>
-<h2 id="_4">下一章<a href="%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a></h2>
-<p><br></p>
-<p><br></p>
-<h2 id="_5">概念解释</h2>
+<hr />
+<h2 id="_4">概念解释</h2>
 <p><a id="buildsystem"></a></p>
 <h4 id="buildsystem"><a href="https://en.wikipedia.org/wiki/Software_build">构建</a>与构建系统(buildsystem):</h4>
 <blockquote>
@@ -207,18 +212,7 @@ CMake通过generator这一<code>后端</code>生成适用于每个机器的构�
 Source Tree(源代码目录):包含源代码的项目顶级目录，从名为CMakeLists.txt文件开始。
 Build Tree(构建树目录)：存储构建系统的顶级目录，CMake会生成有CMakeCache.txt来为该目录标记并存储构建信息。(CMake支持将Build Tree置于Source Tree内(源内构建)，但不鼓励这样做)
 生成器: 进行CMake配置时使用 -G 选项来指定生成器(或者不写，保持默认)</p>
-<h2 id="_6">参考文档</h2>
-<p><a href="https://cliutils.gitlab.io/modern-cmake/README.html">https://cliutils.gitlab.io/modern-cmake/README.html</a><br />
-<a href="https://cmake.org/cmake/help/v3.20/index.html">https://cmake.org/cmake/help/v3.20/index.html</a><br />
-<a href="https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/">https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/</a><br />
-<a href="https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction">https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction</a><br />
-<a href="https://ukabuer.me/blog/more-modern-cmake/">https://ukabuer.me/blog/more-modern-cmake/</a><br />
-<a href="https://www.bilibili.com/video/BV1Mw411M761/">https://www.bilibili.com/video/BV1Mw411M761/</a><br />
-<a href="https://www.bilibili.com/video/BV16P4y1g7MH">https://www.bilibili.com/video/BV16P4y1g7MH</a><br />
-<a href="https://crascit.com/professional-cmake/">https://crascit.com/professional-cmake/</a><br />
-<a href="https://zh.wikipedia.org/wiki/CMake">https://zh.wikipedia.org/wiki/CMake</a><br />
-<a href="https://github.com/Mq-b/CXX_LIB">https://github.com/Mq-b/CXX_LIB</a><br />
-<a href="https://bazel.build/basics?hl=zh-cn">https://bazel.build/basics?hl=zh-cn</a>  </p></div>
+<h2 id="_5">下一章<a href="%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a></h2></div>
             </div>
         </div>
 

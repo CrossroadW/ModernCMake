@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>现代CMake的核心概念 - 现代CMake教程</title>
+        <title>find_package案例 - 现代CMake教程</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -56,7 +56,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">现代CMake的核心概念</a>
+    <a href="../%E7%8E%B0%E4%BB%A3CMake%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/" class="dropdown-item">现代CMake的核心概念</a>
 </li>
                                     
 <li>
@@ -68,7 +68,7 @@
 </li>
                                     
 <li>
-    <a href="../find_package%E6%A1%88%E4%BE%8B/" class="dropdown-item">find_package案例</a>
+    <a href="./" class="dropdown-item active" aria-current="page">find_package案例</a>
 </li>
                                     
 <li>
@@ -95,12 +95,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="nav-link">
+                                <a rel="prev" href="../todo/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/" class="nav-link">
+                                <a rel="next" href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -122,12 +122,8 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#cmake" class="nav-link">现代CMake的核心概念</a>
+            <li class="nav-item" data-bs-level="1"><a href="#find_package" class="nav-link">find_package案例</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#usage-requirements" class="nav-link">使用要求(Usage Requirements)</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
               </ul>
             </li>
         </ul>
@@ -135,39 +131,145 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="cmake">现代CMake的核心概念</h1>
-<p><a id="coreconcept"></a></p>
-<h3 id="_1">目标</h3>
-<p><strong><code>目标（Target）</code></strong>是现代CMake最核心的概念。目标代表了由CMake构建的可执行文件、库和自定义命令。每个add_library、add_executable和add_custom_target命令都会创建一个目标。
-每个对象可以附加属性，属性是附加到特定对象的键值对。  </p>
-<h4 id="_2">目标的主要特点</h4>
+<h1 id="find_package">find_package案例</h1>
+<p>这一章是一个 <strong><code>find_package</code> 案例</strong> 的案例，大部分初学者会经常因为这个命令找不到库而报错(明明别人能跑🤔)：  </p>
+<h3 id="1-find_package">1. <strong>find_package基础案例</strong></h3>
+<p>示例：<code>SDL2</code> 包并构建一个sdl2_demo。</p>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20)
+
+# 生成&lt;build_dir&gt;/compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+project(MinimalCMakeProject)
+
+add_executable(sdl2_demo main.cpp)
+
+# 查找SDL2库
+find_package(SDL2)
+target_link_libraries(sdl2_demo SDL2::SDL2)
+</code></pre>
+<h3 id="2-find_package">2. find_package详解</h3>
+<h4 id="_1">默认搜索模式</h4>
+<p><code>find_package</code> 基本语法：<br />
+<code>find_package(&lt;PackageName&gt; [&lt;version&gt;] [REQUIRED] [COMPONENTS &lt;components&gt;...])</code></p>
+<p><code>find_package</code> 找到一个包（通常由项目外部的东西提供），并加载其这个包。
+<code>find_package</code> 该命令有几种搜索包的模式,默认先按照模块模式搜索，后按照配置模式搜索：</p>
 <ul>
-<li>全局作用域：一旦创建，可在项目中任何地方引用。</li>
-<li>自动扩展名：CMake根据平台自动决定扩展名（如Windows下可执行文件为.exe）。</li>
-<li>动态查询修改：可用set_target_properties和get_target_property动态更新目标属性。</li>
+<li>模块模式（Module mode相对较老，兼容老库）：<br />
+在此模式下，CMake 搜索名为<code>Find&lt;PackageName&gt;.cmake</code>的文件，首先在<code>CMAKE_MODULE_PATH</code>中列出的位置中查找，如果找到该文件，则由 CMake 读取并处理该文件。</li>
+<li>配置模式（Config Mode）: 
+     在此模式下，CMake 搜索名为的文件 &lt;lowercasePackageName&gt;-config.cmake 、<PackageName>Config.cmake，如果指定了<version>选项还会先查找 &lt;lowercasePackageName&gt;-config-version.cmake、<PackageName>ConfigVersion.cmake。  </li>
 </ul>
-<p>可执行文件（Executable）：</p>
-<pre><code>通过add_executable命令创建。例如，add_executable(my_app main.cpp)会创建一个名为my_app的可执行文件，其源文件为main.cpp。
+<h4 id="_2">指定搜索模式</h4>
+<p><code>find_package</code>支持通过<code>MODULE|CONFIG</code>选项来选择某一种搜索模式
+<code>find_package(&lt;PackageName&gt; [...] [MODULE|CONFIG]</code>    </p>
+<p><code>find_package</code>查找会根据以下变量查找上文列出的.cmake文件(常用的)：
+CMAKE_PREFIX_PATH、&lt;PackageName&gt;_DIR、&lt;PackageName&gt;_ROOT、CMAKE_INSTALL_PREFIX(不推荐)、环境变量PATH。</p>
+<h4 id="_3">根据前缀搜索</h4>
+<p>一般是设置<strong><code>CMAKE_PREFIX_PATH</code></strong> ，主要靠它作为搜索<strong><code>前缀</code></strong>,其他变量必须指定到.cmake文件所在目录；不过对于&lt;PackageName&gt;_DIR是必须指定到.cmake所在目录的。
+搜索<strong><code>前缀</code></strong>的搜索规则(<a href="https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure">完整搜索规则参考</a>)：
+适用于unix系的约定:</p>
+<pre><code class="language-txt">&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/cmake/&lt;name&gt;*/
+
+&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/
+
+&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/(cmake|CMake)/
 </code></pre>
-<p>库（Library）：</p>
-<pre><code>通过add_library命令创建。例如，add_library(foo STATIC foo1.c foo2.c)会创建一个名为foo的静态库，其源文件为foo1.c和foo2.c。
+<p>适用于unix/windows的约定：</p>
+<pre><code class="language-txt">&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/cmake/&lt;name&gt;*/
+
+&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/
+
+&lt;prefix&gt;/&lt;name&gt;*/(lib/&lt;arch&gt;|lib*|share)/&lt;name&gt;*/(cmake|CMake)/
 </code></pre>
-<p>自定义目标（Custom Target）：</p>
-<pre><code>通过add_custom_target命令创建，用于执行自定义的构建任务。
+<p>适用于mac的约定：</p>
+<pre><code class="language-txt">&lt;prefix&gt;/&lt;name&gt;.framework/Resources/CMake/
+
+&lt;prefix&gt;/&lt;name&gt;.framework/Versions/*/Resources/
+
+&lt;prefix&gt;/&lt;name&gt;.framework/Versions/*/Resources/CMake/
 </code></pre>
-<h2 id="usage-requirements">使用要求(Usage Requirements)</h2>
-<p>在 CMake 中，<code>使用要求</code>（Usage Requirements）也可以被称作“传播机制”，它指的是目标在构建时的要求，以及这些要求如何传播给其他链接到该目标的目标。可供选择的有<code>PUBLIC 、 PRIVATE 和 INTERFACE</code>。</p>
-<h3 id="_3">具体例子:</h3>
-<p>该例子表示任何链接(target_link_libraries)到目标 foo 的目标都会自动将 foo 的源代码目录作为包含目录，包括自身。</p>
-<pre><code class="language-cmake">add_library(foo foo.cpp)
-target_include_directories(foo PUBLIC &quot;${CMAKE_CURRENT_SOURCE_DIR}&quot;)
+<hr />
+<details>
+<summary>完整的 CMakeLists.txt 和 main.cpp 示例代码(examples/step3)</summary>
+
+<pre><code class="cmake">
+cmake_minimum_required(VERSION 3.20)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+# 创建可执行文件
+add_executable(find_lib_demo main.cpp)
+
+# 查找 SDL2 库
+find_package(SDL2)
+
+# 给find_lib_demo这个目标链接 SDL2 库
+target_link_libraries(find_lib_demo SDL2::SDL2)
 </code></pre>
-<p>对于另外两种<code>使用要求</code>:</p>
-<ul>
-<li>使用 PRIVATE 时，只有 foo 目标本身<code>会</code>将源代码目录作为包含目录。其他链接到 foo 的目标<code>不会继承</code>这个包含目录设置。  </li>
-<li>使用 INTERFACE 时，foo 本身本身<code>不会</code>将源代码目录作为包含目录，而是一个仅供链接的目标。但是，其他链接到 foo 的目标都会自动继承 foo 设置的包含目录。</li>
-</ul>
-<p>下一章<a href="../%E6%9C%80%E5%B0%8F%E6%9E%84%E5%BB%BA/">最小构建.md</a></p></div>
+
+<pre><code class="cpp">
+#include &lt;SDL.h&gt;
+#include &lt;iostream&gt;
+
+int main(int argc, char* args[]) {
+    // 初始化SDL
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+        return -1;
+    }
+
+    // 创建窗口
+    SDL_Window* window = SDL_CreateWindow("SDL Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+    if (window == nullptr) {
+        std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        return -1;
+    }
+
+    // 创建渲染器
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer == nullptr) {
+        std::cerr << "Renderer could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return -1;
+    }
+
+    // 设置绘制颜色为蓝色
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+
+    // 清除屏幕
+    SDL_RenderClear(renderer);
+
+    // 绘制一个矩形
+    SDL_Rect rect = {100, 100, 200, 150};
+    SDL_RenderFillRect(renderer, &rect);
+
+    // 更新屏幕显示
+    SDL_RenderPresent(renderer);
+
+    // 事件处理
+    bool quit = false;
+    SDL_Event e;
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            }
+        }
+    }
+
+    // 释放资源并退出
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
+    return 0;
+}
+</code></pre>
+
+</details></div>
             </div>
         </div>
 
