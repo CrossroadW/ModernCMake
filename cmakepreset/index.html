@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>参考文档 - 现代CMake教程</title>
+        <title>CMakePresets.json - 现代CMake教程</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -68,7 +68,7 @@
 </li>
                                     
 <li>
-    <a href="../cmakepreset/" class="dropdown-item">CMakePresets.json</a>
+    <a href="./" class="dropdown-item active" aria-current="page">CMakePresets.json</a>
 </li>
                                     
 <li>
@@ -80,7 +80,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">参考文档</a>
+    <a href="../%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5/" class="dropdown-item">参考文档</a>
 </li>
                                 </ul>
                             </li>
@@ -99,12 +99,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="nav-link">
+                                <a rel="prev" href="../todo/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="nav-link">
+                                <a rel="next" href="../find_package%E6%A1%88%E4%BE%8B/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -126,8 +126,20 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">参考文档</a>
+            <li class="nav-item" data-bs-level="1"><a href="#cmakepresetsjson" class="nav-link">CMakePresets.json</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#_1" class="nav-link">具体案例</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cmakepresetsjson_1" class="nav-link">CMakePresets.json 具体参数:</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cmakepreset" class="nav-link">cmakepreset复用</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -135,18 +147,199 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="_1">参考文档</h1>
-<p><a href="https://cliutils.gitlab.io/modern-cmake/README.html">https://cliutils.gitlab.io/modern-cmake/README.html</a><br />
-<a href="https://cmake.org/cmake/help/v3.20/index.html">https://cmake.org/cmake/help/v3.20/index.html</a><br />
-<a href="https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/">https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/</a><br />
-<a href="https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction">https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction</a><br />
-<a href="https://ukabuer.me/blog/more-modern-cmake/">https://ukabuer.me/blog/more-modern-cmake/</a><br />
-<a href="https://www.bilibili.com/video/BV1Mw411M761/">https://www.bilibili.com/video/BV1Mw411M761/</a><br />
-<a href="https://www.bilibili.com/video/BV16P4y1g7MH">https://www.bilibili.com/video/BV16P4y1g7MH</a><br />
-<a href="https://crascit.com/professional-cmake/">https://crascit.com/professional-cmake/</a><br />
-<a href="https://zh.wikipedia.org/wiki/CMake">https://zh.wikipedia.org/wiki/CMake</a><br />
-<a href="https://github.com/Mq-b/CXX_LIB">https://github.com/Mq-b/CXX_LIB</a><br />
-<a href="https://bazel.build/basics?hl=zh-cn">https://bazel.build/basics?hl=zh-cn</a>  </p></div>
+<h1 id="cmakepresetsjson">CMakePresets.json</h1>
+<p>CMake 用户经常面临的一个问题如何其他人共享配置(可能需要写run.sh run.ps1 run.bat)。<br />
+自CMake 3.19起支持用json配置并运行项目，CMake 主要支持两个文件CMakePresets.json和CMakeUserPresets.json(要求位于项目根目录,使用preset构建则必须至少存在一个preset）。</p>
+<blockquote>
+<p>两个preset.json没有内容差异。CMakePresets.json是面向所有用户的(理应提交到git)，CMakeUserPresets.json应添加到.gitignore</p>
+</blockquote>
+<h2 id="_1">具体案例</h2>
+<h3 id="_2">准备源代码与配置文件</h3>
+<p>目录结构如下：</p>
+<pre><code class="language-txt">$ tree 
+.
+├── CMakeLists.txt
+├── CMakePresets.json
+└── main.cpp
+</code></pre>
+<p>主要看CMakePresets.json(example/step4)大概如下：</p>
+<pre><code class="language-json">{
+  &quot;version&quot;: 9,
+  &quot;configurePresets&quot;: [
+    {
+      &quot;name&quot;: &quot;config-default&quot;,
+      &quot;description&quot;: &quot;Default configuration&quot;,
+      &quot;generator&quot;: &quot;Ninja&quot;,
+      &quot;binaryDir&quot;: &quot;${sourceDir}/build/default&quot;,
+      &quot;cacheVariables&quot;: {
+        &quot;CMAKE_BUILD_TYPE&quot;: &quot;Debug&quot;,
+       &quot;CMAKE_INSTALL_PREFIX&quot;: &quot;${sourceDir}/install&quot;
+      }
+    },
+    {
+      &quot;name&quot;: &quot;config-release&quot;,
+      &quot;description&quot;: &quot;Release configuration&quot;,
+      &quot;generator&quot;: &quot;Ninja&quot;,
+      &quot;binaryDir&quot;: &quot;${sourceDir}/build/release&quot;,
+      &quot;cacheVariables&quot;: {
+        &quot;CMAKE_BUILD_TYPE&quot;: &quot;Release&quot;,
+        &quot;CMAKE_INSTALL_PREFIX&quot;: &quot;${sourceDir}/release-install&quot;
+      }
+    }
+  ],
+  &quot;buildPresets&quot;: [
+    {
+      &quot;name&quot;: &quot;build-default&quot;,
+      &quot;configurePreset&quot;: &quot;config-default&quot;,
+      &quot;jobs&quot;: 8
+    },
+    {
+      &quot;name&quot;: &quot;build-release&quot;,
+      &quot;configurePreset&quot;: &quot;config-release&quot;,
+      &quot;jobs&quot;: 8
+    }
+  ]
+}
+</code></pre>
+<h3 id="_3">运行:</h3>
+<p>按照通常的cmake项目构建步骤，先配置，后构建。</p>
+<pre><code class="language-bash">$ cmake --list-presets # 输出看是否cmakeprest格式无误
+Available configure presets:
+
+  &quot;config-default&quot;
+  &quot;config-release&quot;
+$ cmake --preset config-default # 选择配置`config-default`,生成&quot;binaryDir&quot;中指定的目录build/default
+
+$ cmake --build --list-presets # 输出可用的build presets(可选)
+Available build presets:
+
+  &quot;build-default&quot;
+  &quot;build-release&quot;
+
+$ cmake --build --preset build-default # 执行构建,生成build/default/cmake_preset可执行程序
+</code></pre>
+<h2 id="cmakepresetsjson_1">CMakePresets.json 具体参数:</h2>
+<p>这里的CMakePresets.json参数非常简单，是完全可以对应到具体的cmake命令上。<br />
+配置阶段参数:</p>
+<pre><code>generator对应-G Ninja
+binaryDir对应-B ./build/default
+CMAKE_BUILD_TYPE对应 -D CMAKE_BUILD_TYPE=Debug
+CMAKE_INSTALL_PREFIX对应 -D CMAKE_INSTALL_PREFIX=./install
+</code></pre>
+<p>构建阶段参数：</p>
+<pre><code>jobs对应 -j/--parallel 8
+</code></pre>
+<h2 id="cmakepreset">cmakepreset复用</h2>
+<p>CMakeUserPresets.json可以使用文件的include字段包含其他文件。这些文件所包含的文件还可以包含其他文件。如果CMakePresets.json和 CMakeUserPresets.json都存在， CMakeUserPresets.json 在格式的所有版本中隐式包含CMakePresets.json ，即使没有include字段。
+具体例子：<br />
+例子根据上面的案例，新增一个CMakeUserPresets.json</p>
+<pre><code class="language-json">{
+    &quot;version&quot;: 9,
+    &quot;configurePresets&quot;: [
+        {
+            &quot;inherits&quot;: &quot;config-default&quot;,
+            &quot;name&quot;: &quot;myconfig&quot;,
+            &quot;cacheVariables&quot;: {
+                &quot;CMAKE_BUILD_TYPE&quot;: &quot;Debug&quot;,
+                &quot;CMAKE_INSTALL_PREFIX&quot;: &quot;${sourceDir}/myinstall&quot;
+            }
+        }
+    ]
+}
+</code></pre>
+<pre><code class="language-bash">$ cmake --list-presets # CMakeUserPresets.json隐式包含CMakePresets.json
+Available configure presets:
+
+  &quot;myconfig&quot;
+  &quot;config-default&quot;
+  &quot;config-release&quot;
+
+$ cmake --build --list-presets
+Available build presets:
+
+  &quot;build-default&quot;
+  &quot;build-release&quot;  
+</code></pre>
+<details>
+<summary>完整的 CMakeLists.txt 和 main.cpp 示例代码(examples/step4)</summary>
+
+<pre><code class="cmake">
+cmake_minimum_required(VERSION 3.20)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+# 创建可执行文件
+add_executable(find_lib_demo main.cpp)
+
+# 查找 SDL2 库
+find_package(SDL2)
+
+# 给find_lib_demo这个目标链接 SDL2 库
+target_link_libraries(find_lib_demo SDL2::SDL2)
+</code></pre>
+
+<pre><code class="cpp">
+#include &lt;SDL.h&gt;
+#include &lt;iostream&gt;
+
+int main(int argc, char* args[]) {
+    // 初始化SDL
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+        return -1;
+    }
+
+    // 创建窗口
+    SDL_Window* window = SDL_CreateWindow("SDL Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+    if (window == nullptr) {
+        std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        return -1;
+    }
+
+    // 创建渲染器
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer == nullptr) {
+        std::cerr << "Renderer could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return -1;
+    }
+
+    // 设置绘制颜色为蓝色
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+
+    // 清除屏幕
+    SDL_RenderClear(renderer);
+
+    // 绘制一个矩形
+    SDL_Rect rect = {100, 100, 200, 150};
+    SDL_RenderFillRect(renderer, &rect);
+
+    // 更新屏幕显示
+    SDL_RenderPresent(renderer);
+
+    // 事件处理
+    bool quit = false;
+    SDL_Event e;
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            }
+        }
+    }
+
+    // 释放资源并退出
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
+    return 0;
+}
+</code></pre>
+
+</details></div>
             </div>
         </div>
 
