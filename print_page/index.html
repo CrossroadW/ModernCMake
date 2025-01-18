@@ -519,19 +519,19 @@ target_link_libraries(sdl2_demo SDL2::SDL2)
 <p><code>find_package</code> 找到一个包（通常由项目外部的东西提供），并加载其这个包。
 <code>find_package</code> 该命令有几种搜索包的模式,默认先按照模块模式搜索，后按照配置模式搜索：</p>
 <ul>
-<li>模块模式（Module mode相对较老，兼容老库）：<br />
+<li>模块模式（Module mode）：<br />
 在此模式下，CMake 搜索名为<code>Find&lt;PackageName&gt;.cmake</code>的文件，首先在<code>CMAKE_MODULE_PATH</code>中列出的位置中查找，如果找到该文件，则由 CMake 读取并处理该文件。</li>
 <li>配置模式（Config Mode）: 
      在此模式下，CMake 搜索名为的文件 &lt;lowercasePackageName&gt;-config.cmake 、&lt;PackageName&gt;Config.cmake，如果指定了<version>选项还会先查找 &lt;lowercasePackageName&gt;-config-version.cmake、&lt;PackageName&gt;ConfigVersion.cmake。  </li>
 </ul>
 <h4 id="find_package%e6%a1%88%e4%be%8b-_2">指定搜索模式</h4>
 <p><code>find_package</code>支持通过<code>MODULE|CONFIG</code>选项来选择某一种搜索模式
-<code>find_package(&lt;PackageName&gt; [...] [MODULE|CONFIG]</code>    </p>
+<code>find_package(&lt;PackageName&gt; [...] [MODULE|CONFIG])</code>    </p>
 <p><code>find_package</code>查找会根据以下变量查找上文列出的.cmake文件(常用的)：
 CMAKE_PREFIX_PATH、&lt;PackageName&gt;_DIR、&lt;PackageName&gt;_ROOT、CMAKE_INSTALL_PREFIX(不推荐)、环境变量PATH。</p>
 <h4 id="find_package%e6%a1%88%e4%be%8b-_3">根据前缀搜索</h4>
-<p>一般是设置<strong><code>CMAKE_PREFIX_PATH</code></strong> ，主要靠它作为搜索<strong><code>前缀</code></strong>,其他变量必须指定到.cmake文件所在目录；不过对于&lt;PackageName&gt;_DIR是必须指定到.cmake所在目录的。
-搜索<strong><code>前缀</code></strong>的搜索规则(<a href="https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure">完整搜索规则参考</a>)：
+<p>一般是设置<strong><code>CMAKE_PREFIX_PATH</code></strong> ，主要靠它作为搜索<strong><code>前缀</code></strong>，并按照搜索规则找到.cmake文件；不过对于&lt;PackageName&gt;_DIR是必须指定到.cmake所在目录的。
+搜索<strong><code>前缀</code></strong>的搜索规则(<a href="https://cmake.org/cmake/help/latest/command/find_package.html#config-mode-search-procedure">完整搜索规则参考</a>)：<br />
 适用于unix系的约定:</p>
 <pre><code class="language-txt">&lt;prefix&gt;/(lib/&lt;arch&gt;|lib*|share)/cmake/&lt;name&gt;*/
 
