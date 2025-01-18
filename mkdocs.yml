@@ -17,5 +17,8 @@ nav:
     - 现代CMake的核心概念.md
     - 最小构建.md
     - todo...: todo.md
+    - find_package案例.md
     - 基本常识.md
+    - 参考链接.md
+  - 基本常识: 基本常识.md 
   - 关于: about.md

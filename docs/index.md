@@ -40,11 +40,9 @@ $ ./step1
 ```
 此外，如果需要同时构建 Debug 和 Release 版本，或者链接外部库，命令行的复杂度将迅速提升，效率也会大大降低。
 
-下一章[环境搭建](环境搭建.md)
-------
-<br>
 
-<br>
+------
+
 ## 概念解释
 
 
@@ -73,15 +71,5 @@ Build Tree(构建树目录)：存储构建系统的顶级目录，CMake会生成
 生成器: 进行CMake配置时使用 -G 选项来指定生成器(或者不写，保持默认)
 
 
-## 参考文档
-<https://cliutils.gitlab.io/modern-cmake/README.html>  
-<https://cmake.org/cmake/help/v3.20/index.html>  
-<https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/>  
-<https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction>  
-<https://ukabuer.me/blog/more-modern-cmake/>  
-<https://www.bilibili.com/video/BV1Mw411M761/>  
-<https://www.bilibili.com/video/BV16P4y1g7MH>  
-<https://crascit.com/professional-cmake/>  
-<https://zh.wikipedia.org/wiki/CMake>  
-<https://github.com/Mq-b/CXX_LIB>  
-<https://bazel.build/basics?hl=zh-cn>  
+下一章[环境搭建](环境搭建.md)
+-----------------------
