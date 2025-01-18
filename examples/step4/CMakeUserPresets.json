@@ -1,0 +1,13 @@
+{
+    "version": 9,
+    "configurePresets": [
+        {
+            "inherits": "config-default",
+            "name": "myconfig",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/myinstall"
+            }
+        }
+    ]
+}

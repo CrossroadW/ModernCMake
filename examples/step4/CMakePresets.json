@@ -1,0 +1,39 @@
+{
+    "version": 9,
+    "configurePresets": [
+      {
+        "name": "config-default",
+        "description": "Default configuration",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/default",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug",
+         "CMAKE_INSTALL_PREFIX": "${sourceDir}/install",
+         "CMAKE_PREFIX_PATH":"/home/awe/Desktop/clone/learn_SDL2/3rd/install/lib64/cmake/SDL2"
+        }
+      },
+      {
+        "name": "config-release",
+        "description": "Release configuration",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/release",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Release",
+          "CMAKE_INSTALL_PREFIX": "${sourceDir}/release-install",
+          "CMAKE_PREFIX_PATH":"/home/awe/Desktop/clone/learn_SDL2/3rd/install/lib64/cmake/SDL2"
+        }
+      }
+    ],
+    "buildPresets": [
+      {
+        "name": "build-default",
+        "configurePreset": "config-default",
+        "jobs": 8
+      },
+      {
+        "name": "build-release",
+        "configurePreset": "config-release",
+        "jobs": 8
+      }
+    ]
+  }
