@@ -12,6 +12,14 @@ cmake_minimum_required(VERSION 3.20)
 # 生成<build_dir>/compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
+# SDL2_DIR 必须指定到.cmake所在路径 
+set(SDL2_DIR /home/awe/Desktop/clone/learn_SDL2/3rd/install/lib64/cmake/SDL2)
+
+# SDL2_ROOT 指定到install既可，`lib64/cmake/SDL2`会自动匹配
+# set(SDL2_ROOT /home/awe/Desktop/clone/learn_SDL2/3rd/install)
+
+# CMAKE_PREFIX_PATH同SDL2_ROOT都按照前缀搜索规则模糊搜索
+# set(CMAKE_PREFIX_PATH /home/awe/Desktop/clone/learn_SDL2/3rd/install)
 project(MinimalCMakeProject)
 
 add_executable(sdl2_demo main.cpp)
@@ -33,7 +41,7 @@ target_link_libraries(sdl2_demo SDL2::SDL2)
 - 模块模式（Module mode相对较老，兼容老库）：  
 在此模式下，CMake 搜索名为`Find<PackageName>.cmake`的文件，首先在`CMAKE_MODULE_PATH`中列出的位置中查找，如果找到该文件，则由 CMake 读取并处理该文件。
 - 配置模式（Config Mode）: 
-     在此模式下，CMake 搜索名为的文件 &lt;lowercasePackageName&gt;-config.cmake 、<PackageName>Config.cmake，如果指定了<version>选项还会先查找 &lt;lowercasePackageName&gt;-config-version.cmake、<PackageName>ConfigVersion.cmake。  
+     在此模式下，CMake 搜索名为的文件 &lt;lowercasePackageName&gt;-config.cmake 、&lt;PackageName&gt;Config.cmake，如果指定了<version>选项还会先查找 &lt;lowercasePackageName&gt;-config-version.cmake、&lt;PackageName&gt;ConfigVersion.cmake。  
 #### 指定搜索模式
 `find_package`支持通过`MODULE|CONFIG`选项来选择某一种搜索模式
 `find_package(<PackageName> [...] [MODULE|CONFIG]`    
