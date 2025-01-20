@@ -142,57 +142,70 @@
 运行时动态库搜索路径</p>
 <h4 id="_3">运行时动态库搜索路径</h4>
 <ul>
-<li>Windows：动态库必须位于系统的搜索路径中，如通过环境变量 PATH 指定，或者直接放在可执行文件所在目录。</li>
-<li>Linux：运行时动态库通过环境变量 LD_LIBRARY_PATH 查找，确保动态库在执行时可被找到。</li>
+<li>Windows：动态库必须位于系统的搜索路径中。一般通过环境变量 PATH 指定，或者直接放在可执行文件所在目录。</li>
+<li>Linux：运行时动态库一般通过环境变量 LD_LIBRARY_PATH 查找，确保动态库在执行时可被找到。</li>
 </ul>
 <h4 id="_4">生成器</h4>
 <p>CMake支持多种生成器来支持不同的构建系统，默认的生成器是(cmake --help 输出中带<code>*</code>标记的generator)
 可以设置环境变量CMAKE_GENERATOR来改变默认生成器(CMake 3.15+）)。</p>
 <h4 id="_5">缓存变量</h4>
-<p>CMake 支持缓存变量，它们存储在<code>构建目录</code>中的 <code>CMakeCache.txt</code> 文件中。调用 CMake 时使用 -D 参数传递的变量会自动作为缓存变量保存。
-缓存变量与普通变量的区别:
-- 普通变量：定义在 CMakeLists.txt 中，具有动态作用域，仅在当前 CMakeLists.txt 或作用域中有效。
-- 缓存变量：全局可见，存在于整个 CMake 配置过程中，即使 CMakeLists.txt 的变量被修改，缓存变量的值不会自动更新，除非强制修改或清除缓存。</p>
-<p>创建缓存变量的方式：
-- 通过命令行 -D 参数：<code>cmake -DCMAKE_BUILD_TYPE=Release</code>
-- 使用 option 命令创建布尔缓存变量<code>option(ENABLE_FEATURE_A "feature a" ON)</code>
-- 使用 set 命令指定缓存类型：<code>set(VAR "value" CACHE STRING "注释")</code></p>
-<blockquote>
-<p>注意: 历史原因，缓存变量修改必须使用set的带<mark>FORCE</mark>版本(VAR "value" CACHE STRING "注释" FORCE)</p>
+<p>CMake 支持缓存变量，它们存储在<code>构建目录</code>中的 <code>CMakeCache.txt</code> 文件中。调用 CMake 时使用 -D 参数传递的变量会自动作为缓存变量保存。<br />
+缓存变量与普通变量的区别:  </p>
+<ul>
+<li>普通变量：
+定义在 CMakeLists.txt 中，具有动态作用域，仅在当前 CMakeLists.txt 或作用域中有效。</li>
+<li>缓存变量：
+全局可见，存在于整个 CMake 配置过程中，即使 CMakeLists.txt 的变量被修改，缓存变量的值不会自动更新，除非强制修改或清除缓存。</li>
+</ul>
+<p>创建缓存变量的方式：  </p>
+<ul>
+<li>通过命令行 -D 参数：<code>cmake -DCMAKE_BUILD_TYPE=Release</code></li>
+<li>使用 option 命令创建布尔缓存变量<code>option(ENABLE_FEATURE_A "feature_a" ON)</code></li>
+<li>使用 set 命令指定缓存类型：<code>set(VAR "value" CACHE STRING "注释")</code><blockquote>
+<p>注意: 缓存变量修改必须使用set的带<mark>FORCE</mark>版本set(VAR "value" CACHE STRING "注释" FORCE)</p>
 </blockquote>
+</li>
+</ul>
 <h4 id="cmake">CMake配置的多种方式</h4>
 <ol>
 <li>使用当前工作目录作为构建树，使用 <path-to-source> 作为源代码目录。</li>
+</ol>
+<pre><code class="language-bash">cmake [options] &lt;path-to-source&gt; # 不推荐, cmake .
+</code></pre>
+<ol>
 <li>使用 <path-to-existing-build> 作为构建树，并从其 CMakeCache.txt 文件加载源树的路径。</li>
+</ol>
+<pre><code class="language-bash">cmake [options] &lt;path-to-existing-build&gt; # 加载已经构建了的缓存，刷新CMakeLists的修改, cmake build/
+</code></pre>
+<ol>
 <li>使用 <path-to-build> 作为构建树，使用 <path-to-source> 作为源树(推荐)。<blockquote>
 <p>如果仅给出一种类型的路径，则当前工作目录 (cwd) 将用于另一种路径。例如：</p>
 </blockquote>
 </li>
 </ol>
-<pre><code class="language-bash">cmake [options] &lt;path-to-source&gt;
-cmake [options] &lt;path-to-existing-build&gt;
-cmake [options] -S &lt;path-to-source&gt; -B &lt;path-to-build&gt;
+<pre><code class="language-bash">cmake [options] -S &lt;path-to-source&gt; -B &lt;path-to-build&gt; # 无歧义， cmake -S . -B build/
 </code></pre>
 <h3 id="cmake_1">CMake标识符规则</h3>
-<p>CMake命令不去分大小写。
-CMake 保留以下标识符（无论是大写、小写或混合大小写）：
-- 以CMAKE_开头
-- <em>CMAKE</em>
-- _后跟人呢会CMake Command</p>
-<h3 id="cmakeliststxt">CMakeLists.txt 内文件路径的查找规则</h3>
+<p>CMake命令不去分大小写。 
+CMake 保留以下标识符（无论是大写、小写或混合大小写）：</p>
 <ul>
-<li>
-<p><strong>绝对路径</strong>：直接按照文件系统中的实际路径查找，无需依赖当前目录。</p>
-</li>
-<li>
-<p><strong>相对路径</strong>：  </p>
-</li>
+<li>begin with <code>CMAKE_</code></li>
+<li>begin with<code>_CMAKE_</code></li>
+<li>begin with <code>_</code></li>
+</ul>
+<h3 id="cmakeliststxt">CMakeLists.txt 内文件路径的查找规则</h3>
+<p>路径分隔符统一以<code>/</code>分隔，cmake会自动处理。<code>\</code>需转义，即<code>\\</code>。</p>
+<ul>
+<li><strong>绝对路径</strong>：直接按照文件系统中的实际路径查找，无需依赖当前目录()。</li>
+<li><strong>相对路径</strong>：  <ul>
 <li><strong>一般情况下</strong>：相对路径是相对于当前 CMakeLists.txt 文件所在的目录。例如，<code>add_executable()</code> 或 <code>add_library()</code> 等命令使用的文件路径，都会以当前 CMakeLists.txt 的目录作为基准。  </li>
 <li><strong>特殊情况</strong>：当使用 <code>include(script.cmake)</code> 或 <code>find_package()</code> 等命令时，路径会相对于调用这些命令的 CMakeLists.txt 文件所在的目录，而不是被包含的脚本文件。</li>
 </ul>
+</li>
+</ul>
 <h4 id="_6">示例</h4>
 <p>假设目录结构如下：</p>
-<pre><code>project/
+<pre><code class="language-bash">project/
 ├── CMakeLists.txt
 ├── src/
 │   ├── CMakeLists.txt
@@ -201,35 +214,41 @@ CMake 保留以下标识符（无论是大写、小写或混合大小写）：
 │   └── setup.cmake
 </code></pre>
 <h4 id="_7">示例代码</h4>
+<p><strong>顶层的CMakeLists.txt 中的相对路径</strong>：</p>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20)
+project(DemoProject)
+
+add_subdirectory(src) # project/
+include(scripts/setup.cmake) # project/
+</code></pre>
+<p><strong>src/CMakeLists.txt 中的相对路径</strong>：  </p>
+<pre><code class="language-cmake">add_executable(app main.cpp) # project/src/
+</code></pre>
+<p><strong><code>scripts/setup.cmake</code> 文件的相对路径</strong>  </p>
+<pre><code class="language-cmake">message(&quot;正在处理的cmake文件路径： ${CMAKE_CURRENT_LIST_DIR}&quot;) # 输出: project/scripts
+message(&quot;当前所在的CMakeLists文件路径： ${CMAKE_CURRENT_SOURCE_DIR}&quot;) # 输出: project
+</code></pre>
+<h4 id="cmake_2">CMake 变量细则</h4>
+<p>CMake 的变量用来存储值，但所有值都是字符串类型。即使看起来像数字或布尔值，CMake 都会以字符串的形式存储它们。</p>
+<pre><code class="language-cmake">set(VAR1 &quot;Hello, World!&quot;)   # 设置变量 VAR1 的值为字符串 &quot;Hello, World!&quot;
+set(VAR2 42)                # 虽然看起来是数字，但 CMake 将 &quot;42&quot; 存储为字符串
+set(VAR3 true)              # 同样，&quot;true&quot; 也是字符串
+</code></pre>
 <ol>
-<li><strong>CMakeLists.txt 中的相对路径</strong><br />
-   顶层的 CMakeLists.txt：
-   ```cmake
-   cmake_minimum_required(VERSION 3.20)
-   project(DemoProject)</li>
+<li>变量具有动态Block Scope(作用域)。</li>
+<li>每个变量“set”或“unset”都会在当前作用域中创建一个绑定,Block Scope结束删除绑定，每次创建作用域会复制父作用域的变量绑定。这意味着函数内部设置的变量不会渗透到父作用域中。</li>
 </ol>
-<p>add_subdirectory(src)
-   include(scripts/setup.cmake) # 按照当前 CMakeLists.txt 的路径查找
-   ```</p>
-<ol>
-<li>
-<p><strong><code>add_subdirectory</code> 子目录中的相对路径</strong><br />
-<code>src/CMakeLists.txt</code>：
-   <code>cmake
-   add_executable(main_app main.cpp) # 相对于 src/CMakeLists.txt</code></p>
-</li>
-<li>
-<p><strong><code>include()</code> 的路径规则</strong><br />
-   假设 <code>scripts/setup.cmake</code> 中有以下内容：
-   <code>cmake
-   message("正在处理的cmake文件路径： ${CMAKE_CURRENT_LIST_DIR}") # 打印 scripts/setup.cmake 的所在目录
-   message("当前所在的CMakeLists文件路径： ${CMAKE_CURRENT_SOURCE_DIR}") # 打印src/CMakeLists.txt 的所在目录
-   CMAKE_CURRENT_SOURCE_DIR</code></p>
-</li>
-</ol>
-<p>运行时输出：
-   <code>正在处理的cmake文件路径： /path_to_project/scripts
-   当前所在的CMakeLists文件路径：/path_to_project/</code></p></div>
+<p>以下命令可以创建新的Block Scope:</p>
+<ul>
+<li>block()</li>
+<li>function()</li>
+<li>add_subdirectory()</li>
+</ul>
+<p><strong>set命令语法：</strong></p>
+<p><code>set(&lt;variable&gt; &lt;value&gt;... [PARENT_SCOPE])</code></p>
+<p>CMake set 命令提供了一个关于作用域的选项，PARENT_SCOPE 将变量设置到父作用域中，而不是当前作用域中。</p>
+<p>另外，CMake缓存变量是具有全局作用域的,除非指定了<code>FORCE</code>选项，否则<code>CACHE</code>选项不会设置<code>CACHE</code>中已存在的变量，即<code>set(VAR "value" CACHE STRING "注释" FORCE)</code>。</p>
+<p>与大多编程语言不同，CMake 的循环(if)和控制流(foreach、while)没有自己的作用域。</p></div>
             </div>
         </div>
 
