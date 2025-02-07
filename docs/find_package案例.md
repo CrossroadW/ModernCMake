@@ -161,4 +161,4 @@ int main(int argc, char* args[]) {
 </code></pre>
 
 </details>
-下一章[CMakePresets.json案例](/cmakepreset/)
+下一章[CMakePresets.json案例](/CMakePresets/)
