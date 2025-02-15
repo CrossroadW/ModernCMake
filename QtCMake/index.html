@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>CMakePresets.json - 现代CMake教程</title>
+        <title>Qt + CMake (example/step6) - 现代CMake教程</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -68,7 +68,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">CMakePresets.json</a>
+    <a href="../CMakePresets/" class="dropdown-item">CMakePresets.json</a>
 </li>
                                     
 <li>
@@ -76,7 +76,7 @@
 </li>
                                     
 <li>
-    <a href="../QtCMake/" class="dropdown-item">Qt + CMake (example/step6)</a>
+    <a href="./" class="dropdown-item active" aria-current="page">Qt + CMake (example/step6)</a>
 </li>
                                     
 <li>
@@ -120,12 +120,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../find_package%E6%A1%88%E4%BE%8B/" class="nav-link">
+                                <a rel="prev" href="../%E8%AE%BE%E7%BD%AE%E7%9B%AE%E6%A0%87%E5%B1%9E%E6%80%A7/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../%E8%AE%BE%E7%BD%AE%E7%9B%AE%E6%A0%87%E5%B1%9E%E6%80%A7/" class="nav-link">
+                                <a rel="next" href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -147,17 +147,19 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#cmakepresetsjson" class="nav-link">CMakePresets.json</a>
-              <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#_1" class="nav-link">具体案例</a>
+            <li class="nav-item" data-bs-level="1"><a href="#qt-cmake-examplestep6" class="nav-link">Qt + CMake (example/step6)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#cmakepresetsjson_1" class="nav-link">CMakePresets.json 具体参数:</a>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#cmake" class="nav-link">CMake 示例</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#cmakepreset" class="nav-link">cmakepreset复用</a>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">运行</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">案例讲解</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -168,201 +170,176 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="cmakepresetsjson">CMakePresets.json</h1>
-<p>CMake 用户经常面临的一个问题如何其他人共享配置(可能需要写run.sh run.ps1 run.bat)。<br />
-自CMake 3.19起支持用json配置并运行项目，CMake 主要支持两个文件CMakePresets.json和CMakeUserPresets.json(要求位于项目根目录,使用preset构建则必须至少存在一个preset）。</p>
+<h1 id="qt-cmake-examplestep6"><strong>Qt + CMake (example/step6)</strong></h1>
+<p>本章主要介绍 <strong>Qt 的 MOC、RCC、UIC</strong> 在 CMake 中的使用方式。</p>
+<h3 id="1-rccqt"><strong>1. RCC（Qt 资源编译器）</strong></h3>
+<p><a href="https://wiki.qt.io/QtResources">Qt 资源系统</a><br />
+<code>rcc</code>（Qt Resource Compiler）用于 <strong>将二进制资源文件嵌入到应用程序中</strong>，提供了一种跨平台的方法来访问图片、音频等文件。<br />
+<strong>核心作用</strong>：</p>
+<ul>
+<li>将 <strong>.qrc</strong> 文件转换为 <strong>C++ 代码</strong>，然后嵌入到可执行文件。</li>
+<li>允许使用 <code>":/path/to/resource"</code> 直接访问资源，而不依赖外部文件。</li>
+</ul>
+<h3 id="2-mocmeta-object-compiler"><strong>2. MOC（Meta-Object Compiler，元对象编译器）</strong></h3>
+<p><a href="https://doc.qt.io/qt-6/moc.html">Qt 元对象编译器</a><br />
+<code>moc</code> 主要用于 <strong>处理 Qt 的元对象系统</strong>，例如：</p>
+<ul>
+<li><strong>信号与槽（signals &amp; slots）</strong></li>
+<li><strong>动态属性（Dynamic Properties）</strong></li>
+<li><strong>运行时类型信息（RTTI）</strong></li>
+</ul>
+<h3 id="3-uicui-compiler"><strong>3. UIC（UI Compiler，用户界面编译器）</strong></h3>
+<p><a href="https://doc.qt.io/qt-6/uic.html">Qt UIC </a><br />
+<code>uic</code> 用于 <strong>将 .ui 文件（Qt Designer 设计的界面）转换为 C++ 代码</strong>，并生成 <code>ui_*.h</code> 头文件。</p>
+<h1 id="cmake">CMake 示例</h1>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20)
+
+project(qt_cmake LANGUAGES CXX)
+
+set(CMAKE_AUTOUIC ON)  # 自动处理 UI 文件
+set(CMAKE_AUTOMOC ON)  # 自动处理 Q_OBJECT 相关 MOC 代码
+set(CMAKE_AUTORCC ON)  # 自动处理 QRC 资源文件
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+
+set(PROJECT_SOURCES
+        main.cpp
+        mainwindow.cpp
+        mainwindow.h # 头文件也是必要的
+        mainwindow.ui # ui也能处理
+        resources.qrc  # 添加 QRC 资源文件
+)
+
+add_executable(untitled1
+            ${PROJECT_SOURCES}
+        )
+
+target_link_libraries(untitled1 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+</code></pre>
+<pre><code class="language-cpp">// mainwindow.h
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include &lt;QMainWindow&gt;
+
+QT_BEGIN_NAMESPACE
+
+namespace Ui {
+class MainWindow;
+}
+
+QT_END_NAMESPACE
+
+class MainWindow : public QMainWindow {
+    Q_OBJECT
+
+public:
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+
+private:
+    Ui::MainWindow *ui;
+};
+#endif // MAINWINDOW_H
+// &lt;&lt;mainwindow.h
+
+
+// mainwindow.cpp
+#include &quot;mainwindow.h&quot;
+#include &quot;ajfioajifojaio/ui_mainwindow.h&quot;
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent),
+      ui(new Ui::MainWindow) {
+    ui-&gt;setupUi(this);
+}
+
+MainWindow::~MainWindow() {
+    delete ui;
+}
+// &lt;&lt;mainwindow.cpp
+</code></pre>
+<h1 id="_1">运行</h1>
+<pre><code class="language-bash">rm build -rf &amp;&amp; 
+cmake -S . -B build -G Ninja \
+-DCMAKE_PREFIX_PATH=/home/awe/Qt/6.8.1/gcc_64 &amp;&amp;
+cmake --build build -j 4
+$ pwd 
+&lt;CMAKE_BINARY_DIR&gt;/build/&lt;target&gt;_autogen/ # moc uic rcc 等生成的文件
+$ tree -L 3 .
+..
+├── EWIEGA46WW
+│   ├── moc_mainwindow.cpp # 由moc生成，根据mainwindow.h中QOBJECT宏生成的moc实现代码，会被链接到target
+│   └── moc_mainwindow.cpp.d # mainwindow.h的依赖文件(.h) 每个#include 都会产生一系列依赖
+├── include
+│   └── ajfioajifojaio # 由uic生成，根据匹配规则(#include &quot;ajfioajifojaio/ui_mainwindow.h&quot;)生成的对应ui.h
+│       └── ui_mainwindow.h
+
+</code></pre>
+<h2 id="_2">案例讲解</h2>
+<p><code>CMAKE_AUTOUIC</code>、 
+<code>CMAKE_AUTOMOC</code>、
+<code>CMAKE_AUTORCC</code>
+这三个<code>CMAKE_&lt;cmake-property&gt;</code> 
+影响后面的每一个target(如add_executable、add_library创建的目标)
+也就是全局开关；</p>
+<p>除此之外也有针对每一个target单独的属性(可以通过set_target_property设置)：
+<a href="https://cmake.org/cmake/help/latest/prop_tgt/AUTOUIC.html">AUTOMOC</a> <a href="https://cmake.org/cmake/help/latest/prop_tgt/AUTOMOC.html">AUTOUIC</a> <a href="https://cmake.org/cmake/help/latest/prop_tgt/AUTORCC.html#prop_tgt:AUTORCC">AUTORCC</a>他们都是cmake中的一个<a href="https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#id1">属性</a></p>
 <blockquote>
-<p>两个preset.json没有内容差异。CMakePresets.json是面向所有用户的(理应提交到git)，CMakeUserPresets.json应添加到.gitignore</p>
+<p>每个对象可以附加属性，属性是附加到特定对象的键值对</p>
 </blockquote>
-<h2 id="_1">具体案例</h2>
-<h3 id="_2">准备源代码与配置文件</h3>
-<p>目录结构如下：</p>
-<pre><code class="language-txt">$ tree 
-.
-├── CMakeLists.txt
-├── CMakePresets.json
-└── main.cpp
+<h4 id="automoc">属性AUTOMOC:</h4>
+<p>决定是否检查目标的c++文件(QOBJECT宏)是否需要moc,默认不会链接.cpp文件生成的moc文件,如果需要可以<code>#include &lt;base&gt;.moc"</code> 如：<code>#include "main.moc</code> 是不是有的地方见过呢🤔<br>
+其实就是自动扫描mainwindow.h中QOBJECT宏，生成moc实现文件moc_mainwindow.cpp，所以.h文件也要add_executable。</p>
+<blockquote>
+<p>此外CLion、Visual Studio 需要 <code>.h</code> 文件用于代码分析，因此非Qt项目的 <code>.h</code> 需要加入 <code>add_executable()</code>。</p>
+</blockquote>
+<h4 id="autouic">属性AUTOUIC:</h4>
+<p>决定是否检查目标中的 C++ 文件以确定它们是否需要运行 uic，并创建规则以在适当的时间执行 uic。</p>
+<blockquote>
+<p>实际就是控制<code>.ui</code> 到 <code>ui_*.h</code>的转换</p>
+</blockquote>
+<p><strong>ui文件查找规则：</strong></p>
+<blockquote>
+<p>cmake会找到与C++代码中匹配<code>&lt;path/&gt;ui_&lt;basename&gt;.h</code>的 #include 指令，如果存在 .ui 文件，则将执行 uic 以生成相应的文件(如上面的<code>ajfioajifojaio/ui_mainwindow.h</code>)。
+.ui 搜索根据以下匹配规则:</p>
+</blockquote>
+<p><code>&lt;cmake_source_dir&gt;/&lt;basename&gt;.ui</code> </p>
+<p><code>&lt;cmake_source_dir&gt;/&lt;path/&gt;&lt;basename&gt;.ui</code>  <strong>推荐</strong> </p>
+<p><code>&lt;AUTOUIC_SEARCH_PATHS&gt;/&lt;basename&gt;.ui</code> </p>
+<blockquote>
+<p><strong>AUTOUIC_SEARCH_PATHS</strong>是自定义的cmake变量</p>
+</blockquote>
+<p><code>&lt;AUTOUIC_SEARCH_PATHS&gt;/&lt;path/&gt;&lt;basename&gt;.ui</code></p>
+<p><strong>最佳实践</strong>：UI 文件应与 <code>.h/.cpp</code> 一起放置：</p>
+<pre><code class="language-bash">$ tree view/
+view/
+├── mainwindow.cpp
+├── mainwindow.h
+└── mainwindow.ui
 </code></pre>
-<p>主要看CMakePresets.json(example/step4)大概如下：</p>
-<pre><code class="language-json">{
-  &quot;version&quot;: 9,
-  &quot;configurePresets&quot;: [
-    {
-      &quot;name&quot;: &quot;config-default&quot;,
-      &quot;description&quot;: &quot;Default configuration&quot;,
-      &quot;generator&quot;: &quot;Ninja&quot;,
-      &quot;binaryDir&quot;: &quot;${sourceDir}/build/default&quot;,
-      &quot;cacheVariables&quot;: {
-        &quot;CMAKE_BUILD_TYPE&quot;: &quot;Debug&quot;,
-       &quot;CMAKE_INSTALL_PREFIX&quot;: &quot;${sourceDir}/install&quot;
-      }
-    },
-    {
-      &quot;name&quot;: &quot;config-release&quot;,
-      &quot;description&quot;: &quot;Release configuration&quot;,
-      &quot;generator&quot;: &quot;Ninja&quot;,
-      &quot;binaryDir&quot;: &quot;${sourceDir}/build/release&quot;,
-      &quot;cacheVariables&quot;: {
-        &quot;CMAKE_BUILD_TYPE&quot;: &quot;Release&quot;,
-        &quot;CMAKE_INSTALL_PREFIX&quot;: &quot;${sourceDir}/release-install&quot;
-      }
-    }
-  ],
-  &quot;buildPresets&quot;: [
-    {
-      &quot;name&quot;: &quot;build-default&quot;,
-      &quot;configurePreset&quot;: &quot;config-default&quot;,
-      &quot;jobs&quot;: 8
-    },
-    {
-      &quot;name&quot;: &quot;build-release&quot;,
-      &quot;configurePreset&quot;: &quot;config-release&quot;,
-      &quot;jobs&quot;: 8
-    }
-  ]
-}
+<h4 id="autorcc">AUTORCC:</h4>
+<p>决定是否 <strong>自动运行 <code>rcc</code></strong>，将 <code>.qrc</code> 文件转换为 C++ 代码。
+<strong>示例：</strong></p>
+<pre><code class="language-xml">&lt;RCC&gt;
+    &lt;qresource prefix=&quot;/&quot;&gt;
+        &lt;file&gt;icons/logo.png&lt;/file&gt;
+        &lt;file&gt;myapp/main.qml&lt;/file&gt;
+    &lt;/qresource&gt;
+&lt;/RCC&gt;
 </code></pre>
-<h3 id="_3">运行:</h3>
-<p>按照通常的cmake项目构建步骤，先配置，后构建。</p>
-<pre><code class="language-bash">$ cmake --list-presets # 输出看是否cmakeprest格式无误
-Available configure presets:
+<p><strong>访问方式：</strong></p>
+<pre><code class="language-cpp">QPixmap pix(&quot;:/icons/logo.png&quot;); 
 
-  &quot;config-default&quot;
-  &quot;config-release&quot;
-$ cmake --preset config-default # 选择配置`config-default`,生成&quot;binaryDir&quot;中指定的目录build/default
-
-$ cmake --build --list-presets # 输出可用的build presets(可选)
-Available build presets:
-
-  &quot;build-default&quot;
-  &quot;build-release&quot;
-
-$ cmake --build --preset build-default # 执行构建,生成build/default/cmake_preset可执行程序
+QQmlApplicationEngine engine;
+//对于要求QUrl的参数使用&quot;qrc:/icons/logo.png&quot;
+engine.load(QUrl(&quot;qrc:/myapp/main.qml&quot;));
 </code></pre>
-<h2 id="cmakepresetsjson_1">CMakePresets.json 具体参数:</h2>
-<p>这里的CMakePresets.json参数非常简单，是完全可以对应到具体的cmake命令上。<br />
-配置阶段参数:</p>
-<pre><code>generator对应-G Ninja
-binaryDir对应-B ./build/default
-CMAKE_BUILD_TYPE对应 -D CMAKE_BUILD_TYPE=Debug
-CMAKE_INSTALL_PREFIX对应 -D CMAKE_INSTALL_PREFIX=./install
-</code></pre>
-<p>构建阶段参数：</p>
-<pre><code>jobs对应 -j/--parallel 8
-</code></pre>
-<h2 id="cmakepreset">cmakepreset复用</h2>
-<p>CMakeUserPresets.json可以使用文件的include字段包含其他文件。这些文件所包含的文件还可以包含其他文件。如果CMakePresets.json和 CMakeUserPresets.json都存在， CMakeUserPresets.json 在格式的所有版本中隐式包含CMakePresets.json ，即使没有include字段。
-具体例子：<br />
-例子根据上面的案例，新增一个CMakeUserPresets.json</p>
-<pre><code class="language-json">{
-    &quot;version&quot;: 9,
-    &quot;configurePresets&quot;: [
-        {
-            &quot;inherits&quot;: &quot;config-default&quot;,
-            &quot;name&quot;: &quot;myconfig&quot;,
-            &quot;cacheVariables&quot;: {
-                &quot;CMAKE_BUILD_TYPE&quot;: &quot;Debug&quot;,
-                &quot;CMAKE_INSTALL_PREFIX&quot;: &quot;${sourceDir}/myinstall&quot;
-            }
-        }
-    ]
-}
-</code></pre>
-<pre><code class="language-bash">$ cmake --list-presets # CMakeUserPresets.json隐式包含CMakePresets.json
-Available configure presets:
-
-  &quot;myconfig&quot;
-  &quot;config-default&quot;
-  &quot;config-release&quot;
-
-$ cmake --build --list-presets
-Available build presets:
-
-  &quot;build-default&quot;
-  &quot;build-release&quot;  
-</code></pre>
-<details>
-<summary>完整的 CMakeLists.txt 和 main.cpp 示例代码(examples/step4)</summary>
-
-<pre><code class="cmake">
-cmake_minimum_required(VERSION 3.20)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
-
-# 创建可执行文件
-add_executable(find_lib_demo main.cpp)
-
-# 查找 SDL2 库
-find_package(SDL2)
-
-# 给find_lib_demo这个目标链接 SDL2 库
-target_link_libraries(find_lib_demo SDL2::SDL2)
-</code></pre>
-
-<pre><code class="cpp">
-#include &lt;SDL.h&gt;
-#include &lt;iostream&gt;
-
-int main(int argc, char* args[]) {
-    // 初始化SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
-        return -1;
-    }
-
-    // 创建窗口
-    SDL_Window* window = SDL_CreateWindow("SDL Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
-    if (window == nullptr) {
-        std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return -1;
-    }
-
-    // 创建渲染器
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == nullptr) {
-        std::cerr << "Renderer could not be created! SDL_Error: " << SDL_GetError() << std::endl;
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return -1;
-    }
-
-    // 设置绘制颜色为蓝色
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-
-    // 清除屏幕
-    SDL_RenderClear(renderer);
-
-    // 绘制一个矩形
-    SDL_Rect rect = {100, 100, 200, 150};
-    SDL_RenderFillRect(renderer, &rect);
-
-    // 更新屏幕显示
-    SDL_RenderPresent(renderer);
-
-    // 事件处理
-    bool quit = false;
-    SDL_Event e;
-    while (!quit) {
-        while (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT) {
-                quit = true;
-            }
-        }
-    }
-
-    // 释放资源并退出
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    return 0;
-}
-</code></pre>
-
-</details>
-
-<p>下一章<a href="/设置目标属性/">设置目标属性</a></p></div>
+<p>通常不必在意(例外是动态库静态库,参见<a href="https://wiki.qt.io/QtResources">wiki</a>)。</p></div>
             </div>
         </div>
 
