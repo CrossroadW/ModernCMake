@@ -86,6 +86,10 @@
 </li>
                                     
 <li>
+    <a href="../parsearg/" class="dropdown-item">💡使用 cmake_parse_arguments 封装 add_library 和 add_executable</a>
+</li>
+                                    
+<li>
     <a href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="dropdown-item">基本常识</a>
 </li>
                                     
@@ -177,11 +181,15 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86" class="nav-link">9. 基本常识</a>
+            <li class="nav-item" data-bs-level="1"><a href="#parsearg" class="nav-link">9. 💡使用 cmake_parse_arguments 封装 add_library 和 add_executable</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#%e5%8f%82%e8%80%83%e9%93%be%e6%8e%a5" class="nav-link">10. 参考文档</a>
+            <li class="nav-item" data-bs-level="1"><a href="#%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86" class="nav-link">10. 基本常识</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="1"><a href="#%e5%8f%82%e8%80%83%e9%93%be%e6%8e%a5" class="nav-link">11. 参考文档</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -190,19 +198,19 @@
             
             <li class="nav-item" data-bs-level="0"><a href="#section-经典案例" class="nav-link">II. 经典案例</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="1"><a href="#cmake%e5%88%b6%e4%bd%9c%e5%ba%93" class="nav-link">11. cmake制作库</a>
+            <li class="nav-item" data-bs-level="1"><a href="#cmake%e5%88%b6%e4%bd%9c%e5%ba%93" class="nav-link">12. cmake制作库</a>
               <ul class="nav flex-column">
               </ul>
             </li>
               </ul>
             </li>
             
-            <li class="nav-item" data-bs-level="0"><a href="#%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86" class="nav-link">12. 基本常识</a>
+            <li class="nav-item" data-bs-level="0"><a href="#%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86" class="nav-link">13. 基本常识</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             
-            <li class="nav-item" data-bs-level="0"><a href="#about" class="nav-link">13. 关于</a>
+            <li class="nav-item" data-bs-level="0"><a href="#about" class="nav-link">14. 关于</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -1110,7 +1118,160 @@ QQmlApplicationEngine engine;
 //对于要求QUrl的参数使用&quot;qrc:/icons/logo.png&quot;
 engine.load(QUrl(&quot;qrc:/myapp/main.qml&quot;));
 </code></pre>
-<p>通常不必在意(例外是动态库静态库,参见<a href="https://wiki.qt.io/QtResources">wiki</a>)。</p></section><section class="print-page" id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86"><h1 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_1">基本常识</h1>
+<p>通常不必在意(例外是动态库静态库,参见<a href="https://wiki.qt.io/QtResources">wiki</a>)。</p></section><section class="print-page" id="parsearg"><h1 id="parsearg-cmake_parse_arguments-add_library-add_executable">💡使用 <code>cmake_parse_arguments</code> 封装 <code>add_library</code> 和 <code>add_executable</code></h1>
+<p>在 CMake 项目中，我们经常需要重复编写类似如下代码：</p>
+<pre><code class="language-cmake">add_library(foo STATIC foo.cpp)
+target_include_directories(foo PRIVATE include)
+target_compile_definitions(foo PRIVATE WORKDIR=/path)
+target_link_libraries(helloworld PRIVATE foo)
+</code></pre>
+<p>这些调用存在大量模板式重复，可以使用 CMake 的 <code>function()</code> + <code>cmake_parse_arguments()</code> 封装成一个通用接口。</p>
+<hr />
+<h2 id="parsearg-my_add_target">🚀 自定义构建函数：<code>my_add_target</code></h2>
+<p>我们定义一个函数 <code>my_add_target()</code>，统一处理目标添加与配置，支持以下参数：</p>
+<ul>
+<li><code>TYPE</code>：目标类型（<code>STATIC</code> 或 <code>EXE</code>）</li>
+<li><code>SOURCES</code>：源文件</li>
+<li><code>DEFINATIONS</code>：预处理宏定义（如 <code>-DDEBUG=1</code>）</li>
+<li><code>INCLUDEDIR</code>：包含目录</li>
+<li><code>LINKLIBS</code>：链接的库/目标</li>
+</ul>
+<p>调用示例如下：</p>
+<pre><code class="language-cmake">my_add_target(
+    helloworld
+    TYPE EXE
+    SOURCES main.cpp 
+    DEFINATIONS WORKDIR=${CMAKE_CURRENT_SOURCE_DIR}
+    INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include
+    LINKLIBS foo
+)
+</code></pre>
+<hr />
+<h2 id="parsearg-cmakeliststxt">📄 完整 CMakeLists.txt 示例</h2>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.10)
+
+project(HelloWorld)
+
+function(my_add_target)
+    # 提取第一个参数作为目标名称
+    set(target_name ${ARGV0})
+
+    # 移除目标名，传入 cmake_parse_arguments 解析参数
+    list(REMOVE_AT ARGV 0)
+    cmake_parse_arguments(arg &quot;&quot; &quot;TYPE&quot; &quot;SOURCES;DEFINATIONS;INCLUDEDIR;LINKLIBS&quot; ${ARGV})
+
+    if(NOT arg_TYPE)
+        message(FATAL_ERROR &quot;my_add_target: TYPE not specified for target ${target_name}&quot;)
+    endif()
+
+    # 根据类型调用不同的命令
+    if(&quot;${arg_TYPE}&quot; STREQUAL &quot;STATIC&quot;)
+        add_library(${target_name} STATIC ${arg_SOURCES})
+    elseif(&quot;${arg_TYPE}&quot; STREQUAL &quot;EXE&quot;)
+        add_executable(${target_name} ${arg_SOURCES})
+    else()
+        message(FATAL_ERROR &quot;my_add_target: Unknown TYPE: ${arg_TYPE}&quot;)
+    endif()
+
+    # 设置包含目录
+    if(arg_INCLUDEDIR)
+        target_include_directories(${target_name} PRIVATE ${arg_INCLUDEDIR})
+    endif()
+
+    # 设置宏定义
+    if(arg_DEFINATIONS)
+        target_compile_definitions(${target_name} PRIVATE ${arg_DEFINATIONS})
+    endif()
+
+    # 链接库
+    if(arg_LINKLIBS)
+        target_link_libraries(${target_name} PRIVATE ${arg_LINKLIBS})
+    endif()
+endfunction()
+
+# 添加静态库 foo
+my_add_target(
+    foo 
+    TYPE STATIC
+    SOURCES foo.cpp
+)
+
+# 添加可执行程序 helloworld，并链接 foo
+my_add_target(
+    helloworld
+    TYPE EXE
+    SOURCES main.cpp 
+    DEFINATIONS WORKDIR=${CMAKE_CURRENT_SOURCE_DIR}
+    INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include
+    LINKLIBS foo
+)
+</code></pre>
+<hr />
+<h2 id="parsearg-_1">🗂️ 项目结构建议</h2>
+<pre><code>your_project/
+├── CMakeLists.txt
+├── foo.cpp
+├── main.cpp
+└── include/
+    └── foo.h
+</code></pre>
+<hr />
+<h2 id="parsearg-argc-argv-argn-argv">📚 附录：理解 ARGC / ARGV / ARGN / ARGV#</h2>
+<p>在自定义函数中，CMake 提供了一些内建变量来访问参数：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ARGC</code></td>
+<td>数值</td>
+<td>参数总个数</td>
+</tr>
+<tr>
+<td><code>ARGV</code></td>
+<td>列表</td>
+<td>所有原始参数</td>
+</tr>
+<tr>
+<td><code>ARGV#</code></td>
+<td>单值</td>
+<td>第 N 个参数（如 <code>ARGV0</code> 是第一个）</td>
+</tr>
+<tr>
+<td><code>ARGN</code></td>
+<td>列表</td>
+<td>超出最后一个形参的剩余参数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="parsearg-_2">示例说明</h3>
+<pre><code class="language-cmake">function(demo name)
+    message(&quot;ARGC: ${ARGC}&quot;)    # 参数个数
+    message(&quot;ARGV: ${ARGV}&quot;)    # 所有参数
+    message(&quot;ARGV0: ${ARGV0}&quot;)  # 第一个参数
+    message(&quot;ARGN: ${ARGN}&quot;)    # 超过 name 的部分
+endfunction()
+
+demo(foo bar baz)
+</code></pre>
+<p>输出为：</p>
+<pre><code>ARGC: 3
+ARGV: foo;bar;baz
+ARGV0: foo
+ARGN: bar;baz
+</code></pre>
+<hr />
+<h3 id="parsearg-argv">⚠️ 注意：不要越界使用 ARGV#</h3>
+<p>使用 <code>ARGV#</code> 时如果超出 <code>ARGC</code> 范围，会产生 <strong>未定义行为</strong>。应当始终检查：</p>
+<pre><code class="language-cmake">if(ARGC GREATER 2)
+    message(&quot;Third arg is: ${ARGV2}&quot;)
+endif()
+</code></pre></section><section class="print-page" id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86"><h1 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_1">基本常识</h1>
 <h4 id="%e5%9f%ba%e6%9c%ac%e5%b8%b8%e8%af%86-_2">动态库链接</h4>
 <p>在 Windows 上，动态库使用 .dll 后缀，但编译器无法直接链接 .dll 文件。通常，我们链接 .dll 对应的 .lib 文件，提供编译时的库信息。
 在 Linux 上，直接链接.so既可。

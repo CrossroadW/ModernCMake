@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>参考文档 - 现代CMake教程</title>
+        <title>💡使用 cmake_parse_arguments 封装 add_library 和 add_executable - 现代CMake教程</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -80,7 +80,7 @@
 </li>
                                     
 <li>
-    <a href="../parsearg/" class="dropdown-item">💡使用 cmake_parse_arguments 封装 add_library 和 add_executable</a>
+    <a href="./" class="dropdown-item active" aria-current="page">💡使用 cmake_parse_arguments 封装 add_library 和 add_executable</a>
 </li>
                                     
 <li>
@@ -88,7 +88,7 @@
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active" aria-current="page">参考文档</a>
+    <a href="../%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5/" class="dropdown-item">参考文档</a>
 </li>
                                 </ul>
                             </li>
@@ -124,12 +124,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="nav-link">
+                                <a rel="prev" href="../QtCMake/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../CMake%E5%88%B6%E4%BD%9C%E5%BA%93/" class="nav-link">
+                                <a rel="next" href="../%E5%9F%BA%E6%9C%AC%E5%B8%B8%E8%AF%86/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -151,8 +151,24 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">参考文档</a>
+            <li class="nav-item" data-bs-level="1"><a href="#cmake_parse_arguments-add_library-add_executable" class="nav-link">💡使用 cmake_parse_arguments 封装 add_library 和 add_executable</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#my_add_target" class="nav-link">🚀 自定义构建函数：my_add_target</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cmakeliststxt" class="nav-link">📄 完整 CMakeLists.txt 示例</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_1" class="nav-link">🗂️ 项目结构建议</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#argc-argv-argn-argv" class="nav-link">📚 附录：理解 ARGC / ARGV / ARGN / ARGV#</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -160,18 +176,160 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="_1">参考文档</h1>
-<p><a href="https://cliutils.gitlab.io/modern-cmake/README.html">https://cliutils.gitlab.io/modern-cmake/README.html</a><br />
-<a href="https://cmake.org/cmake/help/v3.20/index.html">https://cmake.org/cmake/help/v3.20/index.html</a><br />
-<a href="https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/">https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/</a><br />
-<a href="https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction">https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction</a><br />
-<a href="https://ukabuer.me/blog/more-modern-cmake/">https://ukabuer.me/blog/more-modern-cmake/</a><br />
-<a href="https://www.bilibili.com/video/BV1Mw411M761/">https://www.bilibili.com/video/BV1Mw411M761/</a><br />
-<a href="https://www.bilibili.com/video/BV16P4y1g7MH">https://www.bilibili.com/video/BV16P4y1g7MH</a><br />
-<a href="https://crascit.com/professional-cmake/">https://crascit.com/professional-cmake/</a><br />
-<a href="https://zh.wikipedia.org/wiki/CMake">https://zh.wikipedia.org/wiki/CMake</a><br />
-<a href="https://github.com/Mq-b/CXX_LIB">https://github.com/Mq-b/CXX_LIB</a><br />
-<a href="https://bazel.build/basics?hl=zh-cn">https://bazel.build/basics?hl=zh-cn</a>  </p></div>
+<h1 id="cmake_parse_arguments-add_library-add_executable">💡使用 <code>cmake_parse_arguments</code> 封装 <code>add_library</code> 和 <code>add_executable</code></h1>
+<p>在 CMake 项目中，我们经常需要重复编写类似如下代码：</p>
+<pre><code class="language-cmake">add_library(foo STATIC foo.cpp)
+target_include_directories(foo PRIVATE include)
+target_compile_definitions(foo PRIVATE WORKDIR=/path)
+target_link_libraries(helloworld PRIVATE foo)
+</code></pre>
+<p>这些调用存在大量模板式重复，可以使用 CMake 的 <code>function()</code> + <code>cmake_parse_arguments()</code> 封装成一个通用接口。</p>
+<hr />
+<h2 id="my_add_target">🚀 自定义构建函数：<code>my_add_target</code></h2>
+<p>我们定义一个函数 <code>my_add_target()</code>，统一处理目标添加与配置，支持以下参数：</p>
+<ul>
+<li><code>TYPE</code>：目标类型（<code>STATIC</code> 或 <code>EXE</code>）</li>
+<li><code>SOURCES</code>：源文件</li>
+<li><code>DEFINATIONS</code>：预处理宏定义（如 <code>-DDEBUG=1</code>）</li>
+<li><code>INCLUDEDIR</code>：包含目录</li>
+<li><code>LINKLIBS</code>：链接的库/目标</li>
+</ul>
+<p>调用示例如下：</p>
+<pre><code class="language-cmake">my_add_target(
+    helloworld
+    TYPE EXE
+    SOURCES main.cpp 
+    DEFINATIONS WORKDIR=${CMAKE_CURRENT_SOURCE_DIR}
+    INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include
+    LINKLIBS foo
+)
+</code></pre>
+<hr />
+<h2 id="cmakeliststxt">📄 完整 CMakeLists.txt 示例</h2>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.10)
+
+project(HelloWorld)
+
+function(my_add_target)
+    # 提取第一个参数作为目标名称
+    set(target_name ${ARGV0})
+
+    # 移除目标名，传入 cmake_parse_arguments 解析参数
+    list(REMOVE_AT ARGV 0)
+    cmake_parse_arguments(arg &quot;&quot; &quot;TYPE&quot; &quot;SOURCES;DEFINATIONS;INCLUDEDIR;LINKLIBS&quot; ${ARGV})
+
+    if(NOT arg_TYPE)
+        message(FATAL_ERROR &quot;my_add_target: TYPE not specified for target ${target_name}&quot;)
+    endif()
+
+    # 根据类型调用不同的命令
+    if(&quot;${arg_TYPE}&quot; STREQUAL &quot;STATIC&quot;)
+        add_library(${target_name} STATIC ${arg_SOURCES})
+    elseif(&quot;${arg_TYPE}&quot; STREQUAL &quot;EXE&quot;)
+        add_executable(${target_name} ${arg_SOURCES})
+    else()
+        message(FATAL_ERROR &quot;my_add_target: Unknown TYPE: ${arg_TYPE}&quot;)
+    endif()
+
+    # 设置包含目录
+    if(arg_INCLUDEDIR)
+        target_include_directories(${target_name} PRIVATE ${arg_INCLUDEDIR})
+    endif()
+
+    # 设置宏定义
+    if(arg_DEFINATIONS)
+        target_compile_definitions(${target_name} PRIVATE ${arg_DEFINATIONS})
+    endif()
+
+    # 链接库
+    if(arg_LINKLIBS)
+        target_link_libraries(${target_name} PRIVATE ${arg_LINKLIBS})
+    endif()
+endfunction()
+
+# 添加静态库 foo
+my_add_target(
+    foo 
+    TYPE STATIC
+    SOURCES foo.cpp
+)
+
+# 添加可执行程序 helloworld，并链接 foo
+my_add_target(
+    helloworld
+    TYPE EXE
+    SOURCES main.cpp 
+    DEFINATIONS WORKDIR=${CMAKE_CURRENT_SOURCE_DIR}
+    INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include
+    LINKLIBS foo
+)
+</code></pre>
+<hr />
+<h2 id="_1">🗂️ 项目结构建议</h2>
+<pre><code>your_project/
+├── CMakeLists.txt
+├── foo.cpp
+├── main.cpp
+└── include/
+    └── foo.h
+</code></pre>
+<hr />
+<h2 id="argc-argv-argn-argv">📚 附录：理解 ARGC / ARGV / ARGN / ARGV#</h2>
+<p>在自定义函数中，CMake 提供了一些内建变量来访问参数：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ARGC</code></td>
+<td>数值</td>
+<td>参数总个数</td>
+</tr>
+<tr>
+<td><code>ARGV</code></td>
+<td>列表</td>
+<td>所有原始参数</td>
+</tr>
+<tr>
+<td><code>ARGV#</code></td>
+<td>单值</td>
+<td>第 N 个参数（如 <code>ARGV0</code> 是第一个）</td>
+</tr>
+<tr>
+<td><code>ARGN</code></td>
+<td>列表</td>
+<td>超出最后一个形参的剩余参数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">示例说明</h3>
+<pre><code class="language-cmake">function(demo name)
+    message(&quot;ARGC: ${ARGC}&quot;)    # 参数个数
+    message(&quot;ARGV: ${ARGV}&quot;)    # 所有参数
+    message(&quot;ARGV0: ${ARGV0}&quot;)  # 第一个参数
+    message(&quot;ARGN: ${ARGN}&quot;)    # 超过 name 的部分
+endfunction()
+
+demo(foo bar baz)
+</code></pre>
+<p>输出为：</p>
+<pre><code>ARGC: 3
+ARGV: foo;bar;baz
+ARGV0: foo
+ARGN: bar;baz
+</code></pre>
+<hr />
+<h3 id="argv">⚠️ 注意：不要越界使用 ARGV#</h3>
+<p>使用 <code>ARGV#</code> 时如果超出 <code>ARGC</code> 范围，会产生 <strong>未定义行为</strong>。应当始终检查：</p>
+<pre><code class="language-cmake">if(ARGC GREATER 2)
+    message(&quot;Third arg is: ${ARGV2}&quot;)
+endif()
+</code></pre></div>
             </div>
         </div>
 
