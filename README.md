@@ -5,10 +5,13 @@ C++的复杂系统构建几乎都要用到CMake,尽管国内先进的CMake系统
 # 如何构建/运行该页面
 
 mkdocs build 
+
 mkdocs serve 
 
 # 网页同步
 
 git checkout gh-pages
+
 cp site/* . -r
+
 git checkout master
