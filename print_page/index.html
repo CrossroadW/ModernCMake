@@ -58,7 +58,7 @@
 </li>
                                     
 <li>
-    <a href="../%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="dropdown-item">CMake C++环境搭建</a>
+    <a href="../%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="dropdown-item">环境搭建</a>
 </li>
                                     
 <li>
@@ -153,7 +153,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="1"><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba" class="nav-link">2. CMake C++环境搭建</a>
+            <li class="nav-item" data-bs-level="1"><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba" class="nav-link">2. 环境搭建</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -300,7 +300,28 @@ Build Tree(构建树目录)：存储构建系统的顶级目录，CMake会生成
 <!-- # 赞助
 如果你觉得本项目对你的帮助很大，可以请作者喝一杯奶茶🎁😉。
 ![微信](img/wechat.jpg)
-![支付宝](img/alipay.jpg) --></section><section class="print-page" id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba"><h1 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake-c">CMake C++环境搭建</h1>
+![支付宝](img/alipay.jpg) --></section><section class="print-page" id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba"><div class="toc">
+<ul>
+<li><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake-c">CMake C++环境搭建</a><ul>
+<li><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-c">C++编译器安装</a><ul>
+<li><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-1-visual-studio">1. Visual Studio[推荐]：</a></li>
+<li><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-2-scoop">2. Scoop(命令行安装工具):</a></li>
+<li><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-3-winlibs">3. 手动安装winlibs：</a></li>
+<li><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-4-ninja">4.安装 Ninja(推荐)</a></li>
+</ul>
+</li>
+<li><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake">CMake环境准备和插件配置</a></li>
+<li><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake-tools">CMake Tools插件的具体功能</a><ul>
+<li><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-_1">构建类型</a></li>
+<li><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-_2">编译器工具链</a></li>
+<li><a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-_3">选择构建目标、调试、运行</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h1 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake-c">CMake C++环境搭建</h1>
 <h2 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-c">C++编译器安装</h2>
 <p>本教程主要讲解Windows上编译器的安装，仅介绍下面三种安装方式：</p>
 <h3 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-1-visual-studio">1. Visual Studio[推荐]：</h3>
@@ -316,6 +337,41 @@ Build Tree(构建树目录)：存储构建系统的顶级目录，CMake会生成
 <h3 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-3-winlibs">3. 手动安装<a href="https://winlibs.com/">winlibs</a>：</h3>
 <p>推荐下载图中的压缩包(也可以下载右边的不带LLVM的版本，体积更小)，解压后把g++.exe所在目录加入环境变量既可
 <img alt="winlibsdownload" src="../img/winlibsdownload.png" /></p>
+<h3 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-4-ninja">4.安装 Ninja(推荐)</h3>
+<ul>
+<li>
+<p>Ninja 是一个专注于速度的小型构建系统，常用于配合 CMake 构建 C++ 项目。以下是在 Windows 下安装 Ninja 的方法：</p>
+</li>
+<li>
+<p><strong>通过包管理器安装（推荐）</strong></p>
+</li>
+</ul>
+<p>如果你已安装 <a href="https://scoop.sh/">scoop</a> 或 <a href="https://chocolatey.org/">choco</a> 包管理器，可以直接在终端运行：</p>
+<pre><code class="language-powershell"># 使用 scoop 安装
+scoop install ninja
+
+# 或使用 choco 安装
+choco install ninja
+</code></pre>
+<ol>
+<li>
+<p><strong>手动下载安装</strong></p>
+</li>
+<li>
+<p>访问 <a href="https://github.com/ninja-build/ninja/releases">Ninja Releases </a>。</p>
+</li>
+<li>下载 <code>ninja-win.zip</code>。</li>
+<li>
+<p>解压后，将 <code>ninja.exe</code> 复制到你的 PATH 路径下（如 Windows 或其他自定义目录）。</p>
+</li>
+<li>
+<p><strong>验证安装</strong></p>
+</li>
+</ol>
+<p>在命令行输入：</p>
+<pre><code class="language-powershell">ninja --version
+</code></pre>
+<p>如果输出版本号，说明安装成功。</p>
 <h2 id="%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba-cmake">CMake环境准备和插件配置</h2>
 <p>实际上很多IDE上都CMake有支持，常见的如：VScode、Visual Studio、Clion，
 当然命令行是最通用的方法，这些都不是必要的，只是有高亮和补全会更友好。</p>
